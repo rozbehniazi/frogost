@@ -226,7 +226,7 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.94);
+      background: rgba(2, 6, 23, 0.95);
       backdrop-filter: blur(8px);
       display: flex;
       flex-direction: column;
@@ -266,6 +266,20 @@
       cursor: pointer;
     }
 
+    .top-back-btn {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      border-radius: 12px;
+      padding: 7px 11px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
     h1.main-title {
       margin: 0 0 4px 0;
       font-size: 38px;
@@ -282,42 +296,150 @@
       color: #cbd5e1;
     }
 
-    .grade-grid {
+    /* Home Screen Player & Cheese Jar Comparison */
+    .home-players-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin: 6px 0 12px 0;
+      margin: 8px 0 12px 0;
     }
 
-    .grade-btn {
-      background: #0f172a;
+    .player-profile-card {
+      background: linear-gradient(180deg, #0f172a 0%, #162033 100%);
       border: 2px solid #334155;
-      border-radius: 18px;
-      padding: 11px 8px;
+      border-radius: 20px;
+      padding: 12px 10px;
       color: white;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
-      transition: all 0.15s;
+      transition: transform 0.12s, border-color 0.2s, box-shadow 0.2s;
+      position: relative;
     }
 
-    .grade-btn .grade-emoji { font-size: 38px; line-height: 1.1; }
-    .grade-btn .grade-title { font-size: 17px; font-weight: 900; }
-    .grade-btn .grade-sub { font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
+    .player-profile-card:active {
+      transform: scale(0.96);
+    }
 
-    .grade-btn.selected {
+    .player-profile-card.leading {
       border-color: var(--accent);
-      background: rgba(250, 204, 21, 0.16);
-      box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.25);
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.2);
     }
 
+    .crown-tag {
+      position: absolute;
+      top: -10px;
+      background: var(--accent);
+      color: #0f172a;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .profile-emoji {
+      font-size: 46px;
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+
+    .profile-name {
+      font-size: 19px;
+      font-weight: 900;
+      margin: 2px 0 0 0;
+    }
+
+    .profile-grade {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    /* Contenitore rettangolare che si riempie di formaggi! */
+    .cheese-jar {
+      width: 100%;
+      height: 84px;
+      background: #060a14;
+      border: 2px solid #334155;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 4px;
+      margin-bottom: 8px;
+    }
+
+    .cheese-jar-fill {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, rgba(250, 204, 21, 0.28) 0%, rgba(245, 158, 11, 0.45) 100%);
+      border-top: 2px solid rgba(250, 204, 21, 0.65);
+      transition: height 0.5s ease-out;
+      z-index: 1;
+    }
+
+    .cheese-pile {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap-reverse;
+      justify-content: center;
+      align-content: flex-start;
+      gap: 1px;
+      font-size: 14px;
+      line-height: 1.05;
+      max-height: 76px;
+      overflow: hidden;
+    }
+
+    .jar-empty-hint {
+      position: relative;
+      z-index: 2;
+      font-size: 11px;
+      color: #475569;
+      margin: auto;
+      font-weight: 700;
+    }
+
+    .profile-stats {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 11px;
+      padding: 6px 8px;
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: #cbd5e1;
+      text-align: left;
+    }
+
+    .profile-stats b {
+      color: white;
+    }
+
+    .tap-to-play-pill {
+      margin-top: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 12px;
+      border-radius: 999px;
+      width: 100%;
+    }
+
+    /* Subject Screen (Screen 2) */
     .rules-box {
       background: rgba(15, 23, 42, 0.65);
       border-radius: 14px;
       padding: 9px 11px;
-      margin-bottom: 12px;
+      margin: 10px 0 12px 0;
       text-align: left;
       font-size: 12px;
       line-height: 1.48;
@@ -327,17 +449,17 @@
     .subject-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 7px;
-      margin-bottom: 12px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
     .btn {
       background: #334155;
       color: white;
       border: none;
-      padding: 11px 8px;
+      padding: 12px 8px;
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
       transition: transform 0.08s, background 0.15s;
@@ -474,57 +596,17 @@
     .stat-label { font-size: 10.5px; color: #94a3b8; }
     .stat-val { font-size: 14px; font-weight: 800; margin-top: 1px; }
 
-    .battle-box {
-      background: linear-gradient(145deg, #0f172a, #172033);
-      border-radius: 16px;
-      padding: 11px;
-      margin: 9px 0;
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      text-align: left;
-    }
-
-    .battle-header {
-      font-size: 12px;
-      font-weight: 900;
-      color: var(--info);
-      margin-bottom: 7px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .battle-cols {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .fighter-card {
-      background: rgba(30, 41, 59, 0.75);
-      border-radius: 12px;
-      padding: 8px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .fighter-card.leader {
-      border-color: var(--accent);
-      background: rgba(250, 204, 21, 0.12);
-    }
-
-    .fighter-name { font-size: 14px; font-weight: 900; margin-bottom: 3px; }
-    .fighter-metric { font-size: 11.5px; color: #cbd5e1; line-height: 1.45; }
-
     .leaderboard-box {
       background: #0f172a;
       border-radius: 14px;
       padding: 9px;
-      margin: 8px 0 10px 0;
+      margin: 8px 0 8px 0;
       border: 1px solid rgba(250, 204, 21, 0.25);
       text-align: left;
     }
 
     .leaderboard-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       color: var(--accent);
       margin-bottom: 5px;
@@ -584,27 +666,87 @@
     <div id="grid"></div>
   </div>
 
-  <!-- Start Screen -->
-  <div id="startScreen" class="overlay">
+  <!-- =======================================================================
+       SKÄRM 1: HOME (ROC vs AURA + OST-BURKAR + POÄNG & FOKUS DIREKT PÅ START)
+       ======================================================================= -->
+  <div id="homeScreen" class="overlay">
     <div class="card">
       <button id="openSettingsBtn" class="top-gear-btn" title="AI & Synk-inställningar">⚙️</button>
       <h1 class="main-title">Frågost</h1>
       <p class="main-subtitle">Vem spelar nu? Fem minuters utmaning.</p>
 
       <div id="cloudStatusBadge" class="sync-pill hidden">☁️ Molnsynk aktiv</div>
-
-      <div class="grade-grid">
-        <button class="grade-btn" data-grade="3" id="grade3Btn">
-          <span class="grade-emoji">🐭</span>
-          <span class="grade-title">Roc</span>
-          <span class="grade-sub">Årskurs 3 • Grå mus</span>
-        </button>
-        <button class="grade-btn selected" data-grade="7" id="grade7Btn">
-          <span class="grade-emoji">🐹</span>
-          <span class="grade-title">Aura</span>
-          <span class="grade-sub">Årskurs 7 • Rosa öron</span>
-        </button>
+      <div style="font-size:11.5px; font-weight:800; color:var(--info); margin-bottom:6px;">
+        🏆 VECKANS POTT (<span id="homeWeekLabel">Vecka --</span>) • <span id="homeLeaderText">Tryck på din mus!</span>
       </div>
+
+      <!-- Två interaktiva kort: Roc och Aura med ost-behållare -->
+      <div class="home-players-grid">
+        <!-- ROC -->
+        <div class="player-profile-card" id="selectRocCard">
+          <div class="crown-tag hidden" id="rocCrown">👑 Leder</div>
+          <div class="profile-emoji">🐭</div>
+          <div class="profile-name">Roc</div>
+          <div class="profile-grade">Årskurs 3</div>
+
+          <div class="cheese-jar" title="Roc's ostpott denna vecka">
+            <div class="cheese-jar-fill" id="rocJarFill" style="height: 0%;"></div>
+            <div class="cheese-pile" id="rocCheesePile"></div>
+            <div class="jar-empty-hint" id="rocJarEmpty">Tom burk</div>
+          </div>
+
+          <div class="profile-stats" id="homeRocStats">
+            Poäng: <b>0 p</b><br>
+            Rätt svar: <b>0 st</b><br>
+            Fokus: <b>0%</b>
+          </div>
+          <div class="tap-to-play-pill">Spela som Roc ▶</div>
+        </div>
+
+        <!-- AURA -->
+        <div class="player-profile-card" id="selectAuraCard">
+          <div class="crown-tag hidden" id="auraCrown">👑 Leder</div>
+          <div class="profile-emoji">🐹</div>
+          <div class="profile-name">Aura</div>
+          <div class="profile-grade">Årskurs 7</div>
+
+          <div class="cheese-jar" title="Aura's ostpott denna vecka">
+            <div class="cheese-jar-fill" id="auraJarFill" style="height: 0%;"></div>
+            <div class="cheese-pile" id="auraCheesePile"></div>
+            <div class="jar-empty-hint" id="auraJarEmpty">Tom burk</div>
+          </div>
+
+          <div class="profile-stats" id="homeAuraStats">
+            Poäng: <b>0 p</b><br>
+            Rätt svar: <b>0 st</b><br>
+            Fokus: <b>0%</b>
+          </div>
+          <div class="tap-to-play-pill">Spela som Aura ▶</div>
+        </div>
+      </div>
+
+      <!-- Historik & Veckovinnare direkt synligt på startsidan -->
+      <div class="leaderboard-box" style="margin-bottom:0;">
+        <div class="leaderboard-title">
+          <span>📅 VECKOVINNARE & SENASTE OMGÅNGAR</span>
+          <span id="homeSyncLabel" style="font-size:10px; color:#94a3b8;">Lokal</span>
+        </div>
+        <div id="homeHistoryList">
+          <div style="font-size:11.5px; color:#64748b;">Inga spelade omgångar ännu.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       SKÄRM 2: ÄMNESVAL FÖR VALD SPELARE (ROC ELLER AURA)
+       ======================================================================= -->
+  <div id="subjectScreen" class="overlay hidden">
+    <div class="card">
+      <button id="backToHomeBtn" class="top-back-btn">← Hem</button>
+      <div style="font-size:44px; line-height:1.1; margin-top:4px;" id="chosenPlayerEmoji">🐹</div>
+      <h2 style="margin:4px 0 2px 0; font-size:24px; color:var(--accent);" id="chosenPlayerTitle">Aura (Åk 7)</h2>
+      <p style="margin:0 0 10px 0; font-size:12.5px; color:#cbd5e1;">Välj skolämne eller skapa ett eget med AI</p>
 
       <div class="rules-box">
         <div><span id="ruleMouseEmoji">🐹</span> <b>Musen:</b> +10p. 😼 <b>Katten:</b> Nollställer poäng (0p).</div>
@@ -612,7 +754,6 @@
         <div>💀 <b>Dödskallen (~2%):</b> Rör du den avslutas omgången.</div>
       </div>
 
-      <p style="font-size:12px; font-weight:700; margin:0 0 6px 0; text-align:left;">Välj ämne (Lgr22):</p>
       <div class="subject-grid" id="subjectGrid">
         <button class="btn selected" data-subject="blandat">🎲 Blandat</button>
         <button class="btn" data-subject="matematik">📐 Matematik</button>
@@ -694,17 +835,17 @@
     </div>
   </div>
 
-  <!-- Game Over & Veckans Pott Screen -->
+  <!-- Game Over Screen -->
   <div id="gameOverScreen" class="overlay hidden">
     <div class="card">
       <div style="font-size:38px; margin-bottom:2px;" id="gameOverEmoji">⏱️</div>
       <h1 style="color:var(--accent); font-size:20px;" id="gameOverTitle">Tiden är ute!</h1>
       <p style="color:#cbd5e1; font-size:12px; margin:2px 0 8px 0;" id="gameOverReason">5 minuter har gått!</p>
 
-      <div style="background:#0f172a; padding:9px; border-radius:14px; border:1px solid rgba(250,204,21,0.35);">
+      <div style="background:#0f172a; padding:10px; border-radius:14px; border:1px solid rgba(250,204,21,0.35);">
         <div style="font-size:11.5px; color:#94a3b8;">Omgångens poäng för <b id="endPlayerName" style="color:white;">Aura</b></div>
-        <div style="font-size:28px; font-weight:900; color:var(--accent);" id="finalTotalScore">0 p</div>
-        <div style="font-size:11px; color:#38bdf8; font-weight:700;" id="roundFocusBadge">Fokus & Reflex-index: 0%</div>
+        <div style="font-size:30px; font-weight:900; color:var(--accent);" id="finalTotalScore">0 p</div>
+        <div style="font-size:11.5px; color:#38bdf8; font-weight:700;" id="roundFocusBadge">Fokus & Reflex-index: 0%</div>
       </div>
 
       <div class="stats-grid">
@@ -726,43 +867,10 @@
         </div>
       </div>
 
-      <!-- Veckans Pott (Synkad tävling som nollställs varje måndag) -->
-      <div class="battle-box">
-        <div class="battle-header">
-          <span>🏆 VECKANS POTT (<span id="weekLabel">Vecka --</span>)</span>
-          <span id="battleLeaderTag" style="color:var(--accent); font-size:11px;">Laddar...</span>
-        </div>
-        <div class="battle-cols">
-          <div class="fighter-card" id="rocCard">
-            <div class="fighter-name">🐭 Roc</div>
-            <div class="fighter-metric" id="rocStatsText">
-              Veckopoäng: <b>0 p</b><br>
-              Rätt svar: <b>0 st</b><br>
-              Fokusindex: <b>0%</b>
-            </div>
-          </div>
-          <div class="fighter-card" id="auraCard">
-            <div class="fighter-name">🐹 Aura</div>
-            <div class="fighter-metric" id="auraStatsText">
-              Veckopoäng: <b>0 p</b><br>
-              Rätt svar: <b>0 st</b><br>
-              Fokusindex: <b>0%</b>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tidigare veckovinnare & Senaste rekord -->
-      <div class="leaderboard-box">
-        <div class="leaderboard-title">
-          <span>📅 VECKOVINNARE & REKORD</span>
-          <span id="syncStatusFooter" style="font-size:10.5px; color:#4ade80;">Lokal lagring</span>
-        </div>
-        <div id="leaderboardList"></div>
-      </div>
+      <div id="syncStatusFooter" style="font-size:11px; color:#4ade80; margin:6px 0 10px 0;">Sparat i Veckans Pott</div>
 
       <button class="btn btn-primary" id="restartBtn">SPELA IGEN 🔄</button>
-      <button class="btn" id="menuBtn" style="width:100%; margin-top:7px;">Tillbaka till start</button>
+      <button class="btn" id="menuBtn" style="width:100%; margin-top:7px;">Tillbaka till startsidan (Se potten)</button>
     </div>
   </div>
 
@@ -862,8 +970,9 @@ class SoundFX {
 const sfx = new SoundFX();
 
 /* ==========================================================================
-   3. SPELVARIABLER, INSTÄLLNINGAR & VECKO-ID (ISO WEEK)
+   3. SPELVARIABLER, INSTÄLLNINGAR & VECKO-ID
    ========================================================================== */
+const GEMINI_MODEL_ID = "models/gemini-3.8-flash";
 const TOTAL_GAME_SECONDS = 300;
 const GRID_SIZE = 12;
 const gridEl = document.getElementById('grid');
@@ -883,7 +992,7 @@ for (let i = 0; i < GRID_SIZE; i++) {
   hole.addEventListener('pointerdown', (e) => { e.preventDefault(); handleHoleTap(i); });
 }
 
-let gameState = 'MENU';
+let gameState = 'HOME';
 let selectedGrade = '7';
 let selectedSubject = 'blandat';
 let customQuestions = JSON.parse(localStorage.getItem('fragost_custom_q') || '[]');
@@ -948,13 +1057,9 @@ function computeFocusIndex(mCaught, mSpawned, qCorrect, qWrong, eMisses, cHit) {
 
 function updateCloudBadge() {
   const badge = document.getElementById('cloudStatusBadge');
-  if (firebaseDbUrl) {
-    badge.classList.remove('hidden');
-  } else {
-    badge.classList.add('hidden');
-  }
+  if (firebaseDbUrl) badge.classList.remove('hidden');
+  else badge.classList.add('hidden');
 }
-updateCloudBadge();
 
 function updateCustomSubjectButton() {
   const btn = document.getElementById('customSubjectBtn');
@@ -968,7 +1073,177 @@ function updateCustomSubjectButton() {
 updateCustomSubjectButton();
 
 /* ==========================================================================
-   4. INSTÄLLNINGAR MODAL (API-NYCKEL & FIREBASE)
+   4. HOME-SKÄRM: FYLL OST-BURKAR & HÄMTA VECKANS POTT
+   ========================================================================== */
+function fillCheeseJar(playerPrefix, score) {
+  const fillEl = document.getElementById(`${playerPrefix}JarFill`);
+  const pileEl = document.getElementById(`${playerPrefix}CheesePile`);
+  const emptyEl = document.getElementById(`${playerPrefix}JarEmpty`);
+
+  // Beräkna hur full burken ska vara (max vid ca 1500 poäng i veckan = 100%)
+  const pct = Math.min(100, Math.round((score / 1500) * 100));
+  fillEl.style.height = `${pct}%`;
+
+  // Lägg till små ost-emojis i burken (1 ost per 40 poäng, max 24 ostar)
+  const cheeseCount = score > 0 ? Math.min(24, Math.max(1, Math.floor(score / 40))) : 0;
+  if (cheeseCount === 0) {
+    pileEl.innerHTML = '';
+    emptyEl.classList.remove('hidden');
+  } else {
+    emptyEl.classList.add('hidden');
+    pileEl.textContent = '🧀'.repeat(cheeseCount);
+  }
+}
+
+async function refreshHomeDashboard() {
+  const weekInfo = getISOWeekInfo();
+  document.getElementById('homeWeekLabel').textContent = weekInfo.label;
+  updateCloudBadge();
+
+  let allWeeks = JSON.parse(localStorage.getItem('fragost_weeks_v1') || '{}');
+  let recentRuns = JSON.parse(localStorage.getItem('fragost_runs_v1') || '[]');
+  const homeSyncLabel = document.getElementById('homeSyncLabel');
+
+  if (firebaseDbUrl) {
+    homeSyncLabel.textContent = "☁️ Synkar...";
+    try {
+      const res = await fetch(`${firebaseDbUrl}/fragost.json`);
+      if (res.ok) {
+        const cloudData = await res.json();
+        if (cloudData) {
+          if (cloudData.weeks) {
+            allWeeks = cloudData.weeks;
+            localStorage.setItem('fragost_weeks_v1', JSON.stringify(allWeeks));
+          }
+          if (Array.isArray(cloudData.runs)) {
+            recentRuns = cloudData.runs;
+            localStorage.setItem('fragost_runs_v1', JSON.stringify(recentRuns));
+          }
+        }
+        homeSyncLabel.textContent = "☁️ Synkad";
+      } else {
+        homeSyncLabel.textContent = "⚠️ Synkfel";
+      }
+    } catch (_) {
+      homeSyncLabel.textContent = "📴 Offline";
+    }
+  } else {
+    homeSyncLabel.textContent = "📱 Lokal";
+  }
+
+  const cur = allWeeks[weekInfo.key] || {
+    label: weekInfo.label,
+    roc: { score: 0, correctQ: 0, focusSum: 0, games: 0 },
+    aura: { score: 0, correctQ: 0, focusSum: 0, games: 0 }
+  };
+
+  const rocFocus = cur.roc.games > 0 ? Math.round(cur.roc.focusSum / cur.roc.games) : 0;
+  const auraFocus = cur.aura.games > 0 ? Math.round(cur.aura.focusSum / cur.aura.games) : 0;
+
+  // Fyll ost-burkarna
+  fillCheeseJar('roc', cur.roc.score);
+  fillCheeseJar('aura', cur.aura.score);
+
+  // Uppdatera siffror under burkarna
+  document.getElementById('homeRocStats').innerHTML = `
+    Poäng: <b>${cur.roc.score} p</b><br>
+    Frågor: <b>${cur.roc.correctQ} rätt</b><br>
+    Fokus: <b>${rocFocus}%</b>
+  `;
+  document.getElementById('homeAuraStats').innerHTML = `
+    Poäng: <b>${cur.aura.score} p</b><br>
+    Frågor: <b>${cur.aura.correctQ} rätt</b><br>
+    Fokus: <b>${auraFocus}%</b>
+  `;
+
+  // Krona & Ledartext
+  const rocCard = document.getElementById('selectRocCard');
+  const auraCard = document.getElementById('selectAuraCard');
+  const rocCrown = document.getElementById('rocCrown');
+  const auraCrown = document.getElementById('auraCrown');
+  const leaderText = document.getElementById('homeLeaderText');
+
+  rocCard.classList.remove('leading');
+  auraCard.classList.remove('leading');
+  rocCrown.classList.add('hidden');
+  auraCrown.classList.add('hidden');
+
+  if (cur.roc.score > cur.aura.score) {
+    rocCard.classList.add('leading');
+    rocCrown.classList.remove('hidden');
+    leaderText.textContent = `🐭 Roc leder med +${cur.roc.score - cur.aura.score}p!`;
+  } else if (cur.aura.score > cur.roc.score) {
+    auraCard.classList.add('leading');
+    auraCrown.classList.remove('hidden');
+    leaderText.textContent = `🐹 Aura leder med +${cur.aura.score - cur.roc.score}p!`;
+  } else if (cur.roc.score > 0) {
+    leaderText.textContent = `🤝 Helt jämnt!`;
+  } else {
+    leaderText.textContent = `Tryck på din mus för att börja!`;
+  }
+
+  // Historiklista på startsidan
+  const listEl = document.getElementById('homeHistoryList');
+  listEl.innerHTML = '';
+
+  const pastKeys = Object.keys(allWeeks).filter(k => k !== weekInfo.key).sort().reverse().slice(0, 2);
+  pastKeys.forEach(k => {
+    const wk = allWeeks[k];
+    const winnerText = wk.roc.score > wk.aura.score
+      ? `🐭 Roc (${wk.roc.score}p vs ${wk.aura.score}p)`
+      : wk.aura.score > wk.roc.score
+        ? `🐹 Aura (${wk.aura.score}p vs ${wk.roc.score}p)`
+        : `🤝 Oavgjort (${wk.roc.score}p)`;
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.style.borderLeft = "3px solid #38bdf8";
+    row.innerHTML = `<div>🏅 <b>${wk.label}:</b> ${winnerText}</div><div style="color:#38bdf8; font-size:10.5px;">Vinnare</div>`;
+    listEl.appendChild(row);
+  });
+
+  if (recentRuns.length === 0 && pastKeys.length === 0) {
+    listEl.innerHTML = '<div style="font-size:11.5px; color:#64748b;">Inga spelade omgångar ännu.</div>';
+  } else {
+    recentRuns.slice(0, 4).forEach(rec => {
+      const row = document.createElement('div');
+      row.className = 'lb-row';
+      row.innerHTML = `
+        <div>${rec.mouse} <b>${rec.name}</b> <span style="color:#94a3b8; font-size:11px;">(${rec.date})</span></div>
+        <div style="font-weight:800; color:var(--accent);">${rec.score} p</div>
+      `;
+      listEl.appendChild(row);
+    });
+  }
+}
+
+// Navigation: Home -> Ämnesval (Skärm 2)
+function openSubjectScreenForGrade(grade) {
+  selectedGrade = grade;
+  const p = getPlayerInfo();
+  document.getElementById('chosenPlayerEmoji').textContent = p.emoji;
+  document.getElementById('chosenPlayerTitle').textContent = `${p.name} (Årskurs ${p.grade})`;
+  document.getElementById('ruleMouseEmoji').textContent = p.emoji;
+
+  document.getElementById('homeScreen').classList.add('hidden');
+  document.getElementById('subjectScreen').classList.remove('hidden');
+  gameState = 'SUBJECT_SELECT';
+}
+
+document.getElementById('selectRocCard').addEventListener('click', () => openSubjectScreenForGrade('3'));
+document.getElementById('selectAuraCard').addEventListener('click', () => openSubjectScreenForGrade('7'));
+
+document.getElementById('backToHomeBtn').addEventListener('click', () => {
+  document.getElementById('subjectScreen').classList.add('hidden');
+  document.getElementById('homeScreen').classList.remove('hidden');
+  gameState = 'HOME';
+  refreshHomeDashboard();
+});
+
+// Initiera startsidan direkt vid laddning
+refreshHomeDashboard();
+
+/* ==========================================================================
+   5. INSTÄLLNINGAR MODAL (API-NYCKEL & FIREBASE)
    ========================================================================== */
 document.getElementById('openSettingsBtn').addEventListener('click', () => {
   document.getElementById('geminiApiKeyInput').value = geminiApiKey;
@@ -985,36 +1260,21 @@ document.getElementById('saveSettingsBtn').addEventListener('click', () => {
   firebaseDbUrl = document.getElementById('firebaseUrlInput').value.trim().replace(/\/+$/, '');
   localStorage.setItem('fragost_gemini_key', geminiApiKey);
   localStorage.setItem('fragost_firebase_url', firebaseDbUrl);
-  updateCloudBadge();
   document.getElementById('settingsModal').classList.add('hidden');
+  refreshHomeDashboard();
 });
 
 /* ==========================================================================
-   5. GEMINI AI-MOTOR (AUTO-MODELL + OÄNDLIGA LGR22-FRÅGOR UTAN UPPREPNING)
+   6. GEMINI 3.8 FLASH AI-MOTOR
    ========================================================================== */
 async function callGeminiForQuestions(promptText) {
-  if (!geminiApiKey) throw new Error("Ingen Gemini API-nyckel sparad (klicka på ⚙️).");
+  if (!geminiApiKey) throw new Error("Ingen Gemini API-nyckel sparad (klicka på ⚙️ på startsidan).");
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 22000);
 
-  let targetModel = "models/gemini-3.8-flash";
-  try {
-    const listRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(geminiApiKey)}`,
-      { signal: controller.signal }
-    );
-    if (listRes.ok) {
-      const listData = await listRes.json();
-      const validFlash = (listData.models || []).find(
-        m => m.name && m.name.includes("flash") && (m.supportedGenerationMethods || []).includes("generateContent")
-      );
-      if (validFlash) targetModel = validFlash.name;
-    }
-  } catch (_) {}
-
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/${targetModel}:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
+    `https://generativelanguage.googleapis.com/v1beta/${GEMINI_MODEL_ID}:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1045,7 +1305,6 @@ async function callGeminiForQuestions(promptText) {
   return parsed;
 }
 
-// Bakgrundsgenerering av nya Lgr22-frågor vid spelstart så de aldrig upprepas
 async function prefetchAiCurriculumQuestions() {
   if (!geminiApiKey || selectedSubject === 'custom' || selectedSubject === 'logik') return;
 
@@ -1056,7 +1315,7 @@ async function prefetchAiCurriculumQuestions() {
     no: "NO (biologi, fysik och kemi)",
     so: "SO (historia, geografi, samhällskunskap och religionskunskap)",
     svenska: "Svenska (grammatik, ordklasser, satsdelar, retorik, källkritik, språkhistoria)",
-    engelska: "Engelska (engelsk grammatik, ordförråd, idiom och läsförståelse med frågor på engelska eller svenska)"
+    engelska: "Engelska (engelsk grammatik, ordförråd, idiom och läsförståelse)"
   };
 
   const levelDesc = p.grade === '3'
@@ -1082,15 +1341,12 @@ Svara ENDAST med en JSON-array:
       options: item.options,
       answer: typeof item.answer === 'number' ? item.answer : 0
     }));
-    // Lägg de nya AI-frågorna längst fram i kortleken!
     questionDeck = [...questionDeck, ...shuffleArray(formatted)];
-  } catch (_) {
-    // Om offline används reservkortleken sömlöst
-  }
+  } catch (_) {}
 }
 
 /* ==========================================================================
-   6. EGET ÄMNE MODAL (✨ EGET)
+   7. EGET ÄMNE MODAL (✨ EGET)
    ========================================================================== */
 function openCustomModal() {
   if (!geminiApiKey) {
@@ -1168,17 +1424,8 @@ Svara ENDAST med en giltig JSON-array:
 });
 
 /* ==========================================================================
-   7. SPELKONTROLLER & KORTLEKSHANTERING
+   8. SPELKONTROLLER & KORTLEKSHANTERING
    ========================================================================== */
-document.querySelectorAll('.grade-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    selectedGrade = btn.dataset.grade;
-    document.getElementById('ruleMouseEmoji').textContent = getPlayerInfo().emoji;
-  });
-});
-
 document.querySelectorAll('#subjectGrid .btn').forEach(btn => {
   btn.addEventListener('click', () => {
     if (btn.dataset.subject === 'custom') {
@@ -1209,8 +1456,9 @@ document.getElementById('stopGameBtn').addEventListener('click', () => {
 document.getElementById('menuBtn').addEventListener('click', () => {
   document.getElementById('gameOverScreen').classList.add('hidden');
   document.getElementById('hud').classList.add('hidden');
-  document.getElementById('startScreen').classList.remove('hidden');
-  gameState = 'MENU';
+  document.getElementById('homeScreen').classList.remove('hidden');
+  gameState = 'HOME';
+  refreshHomeDashboard();
 });
 document.getElementById('muteBtn').addEventListener('click', () => {
   sfx.muted = !sfx.muted;
@@ -1233,7 +1481,6 @@ function buildQuestionDecks() {
   if (selectedSubject !== 'blandat' && selectedSubject !== 'custom') {
     pool = pool.filter(q => q.subject === selectedSubject);
   }
-  // Prioritera frågor som inte nyligen visats
   const unseen = pool.filter(q => !seenQuestionHistory.includes(q.q));
   const seen = pool.filter(q => seenQuestionHistory.includes(q.q));
   questionDeck = [...shuffleArray(seen), ...shuffleArray(unseen)];
@@ -1251,7 +1498,6 @@ function drawNextQuestion(difficulty, forceVisualTimed) {
 
   if (questionDeck.length === 0) buildQuestionDecks();
 
-  // Sök bakifrån så de nyast genererade AI-frågorna dras först
   let foundIdx = -1;
   for (let i = questionDeck.length - 1; i >= 0; i--) {
     if (questionDeck[i].difficulty === difficulty) {
@@ -1261,7 +1507,6 @@ function drawNextQuestion(difficulty, forceVisualTimed) {
   }
   const chosen = foundIdx !== -1 ? questionDeck.splice(foundIdx, 1)[0] : questionDeck.pop();
 
-  // Registrera frågan i historiken för att undvika upprepningar
   if (chosen && chosen.q) {
     seenQuestionHistory.push(chosen.q);
     if (seenQuestionHistory.length > 80) seenQuestionHistory.shift();
@@ -1287,8 +1532,6 @@ function startGame() {
   clearInterval(quizInterval);
   clearAllHoles();
   buildQuestionDecks();
-
-  // Hämta färska AI-frågor i bakgrunden baserat på Lgr22
   prefetchAiCurriculumQuestions();
 
   currentScore = 0;
@@ -1306,7 +1549,8 @@ function startGame() {
   gameState = 'PLAYING';
   lastFrameTime = performance.now();
 
-  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('homeScreen').classList.add('hidden');
+  document.getElementById('subjectScreen').classList.add('hidden');
   document.getElementById('gameOverScreen').classList.add('hidden');
   document.getElementById('quizScreen').classList.add('hidden');
   document.getElementById('hud').classList.remove('hidden');
@@ -1478,7 +1722,7 @@ function handleHoleTap(index) {
 }
 
 /* ==========================================================================
-   8. QUIZ-SYSTEM
+   9. QUIZ-SYSTEM
    ========================================================================== */
 function openQuiz(isHard) {
   gameState = 'QUIZ';
@@ -1622,16 +1866,10 @@ function openQuiz(isHard) {
 }
 
 /* ==========================================================================
-   9. VECKANS POTT & FIREBASE MOLNSYNK MELLAN IPHONES
+   10. VECKANS POTT & FIREBASE MOLNSYNK
    ========================================================================== */
-function getDefaultAllWeeks() {
-  return {};
-}
-
 async function syncWeeklyBattle(playerId, roundScore, roundCorrectQ, roundFocusIdx) {
   const weekInfo = getISOWeekInfo();
-  document.getElementById('weekLabel').textContent = weekInfo.label;
-
   const newRunEntry = {
     id: Date.now(),
     playerId,
@@ -1646,10 +1884,9 @@ async function syncWeeklyBattle(playerId, roundScore, roundCorrectQ, roundFocusI
   let allWeeks = JSON.parse(localStorage.getItem('fragost_weeks_v1') || '{}');
   let recentRuns = JSON.parse(localStorage.getItem('fragost_runs_v1') || '[]');
 
-  // Om Firebase URL är konfigurerad: hämta senaste data från molnet först så båda iPhones slås ihop
   const syncFooter = document.getElementById('syncStatusFooter');
   if (firebaseDbUrl) {
-    syncFooter.textContent = "☁️ Synkar...";
+    syncFooter.textContent = "☁️ Synkar med molnet...";
     try {
       const res = await fetch(`${firebaseDbUrl}/fragost.json`);
       if (res.ok) {
@@ -1662,7 +1899,6 @@ async function syncWeeklyBattle(playerId, roundScore, roundCorrectQ, roundFocusI
     } catch (_) {}
   }
 
-  // Initiera aktuell vecka om den inte finns ännu (ny pott varje måndag!)
   if (!allWeeks[weekInfo.key]) {
     allWeeks[weekInfo.key] = {
       label: weekInfo.label,
@@ -1683,7 +1919,6 @@ async function syncWeeklyBattle(playerId, roundScore, roundCorrectQ, roundFocusI
   localStorage.setItem('fragost_weeks_v1', JSON.stringify(allWeeks));
   localStorage.setItem('fragost_runs_v1', JSON.stringify(recentRuns));
 
-  // Spara tillbaka till Firebase så den andra iPhonen ser det direkt
   if (firebaseDbUrl) {
     try {
       const putRes = await fetch(`${firebaseDbUrl}/fragost.json`, {
@@ -1691,79 +1926,13 @@ async function syncWeeklyBattle(playerId, roundScore, roundCorrectQ, roundFocusI
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ weeks: allWeeks, runs: recentRuns })
       });
-      syncFooter.textContent = putRes.ok ? "☁️ Synkad mellan iPhones" : "⚠️ Synkfel (lokalt sparat)";
+      syncFooter.textContent = putRes.ok ? `☁️ Tillagt i ${weekInfo.label} (Synkad!)` : "⚠️ Synkfel (lokalt sparat)";
     } catch (_) {
       syncFooter.textContent = "⚠️ Offline (lokalt sparat)";
     }
   } else {
-    syncFooter.textContent = "📱 Endast denna enhet (koppla moln i ⚙️)";
+    syncFooter.textContent = `📱 Tillagt i ${weekInfo.label}`;
   }
-
-  renderBattleAndHistory(allWeeks, weekInfo.key, recentRuns, newRunEntry.id);
-}
-
-function renderBattleAndHistory(allWeeks, currentWeekKey, recentRuns, currentRunId) {
-  const cur = allWeeks[currentWeekKey];
-  const rocFocus = cur.roc.games > 0 ? Math.round(cur.roc.focusSum / cur.roc.games) : 0;
-  const auraFocus = cur.aura.games > 0 ? Math.round(cur.aura.focusSum / cur.aura.games) : 0;
-
-  document.getElementById('rocStatsText').innerHTML = `
-    Veckopott: <b>${cur.roc.score} p</b><br>
-    Rätt svar: <b>${cur.roc.correctQ} st</b><br>
-    Fokusindex: <b>${rocFocus}%</b>
-  `;
-
-  document.getElementById('auraStatsText').innerHTML = `
-    Veckopott: <b>${cur.aura.score} p</b><br>
-    Rätt svar: <b>${cur.aura.correctQ} st</b><br>
-    Fokusindex: <b>${auraFocus}%</b>
-  `;
-
-  const rocCard = document.getElementById('rocCard');
-  const auraCard = document.getElementById('auraCard');
-  rocCard.classList.remove('leader');
-  auraCard.classList.remove('leader');
-
-  const leaderTag = document.getElementById('battleLeaderTag');
-  if (cur.roc.score > cur.aura.score) {
-    rocCard.classList.add('leader');
-    leaderTag.textContent = `🐭 Roc leder +${cur.roc.score - cur.aura.score}p!`;
-  } else if (cur.aura.score > cur.roc.score) {
-    auraCard.classList.add('leader');
-    leaderTag.textContent = `🐹 Aura leder +${cur.aura.score - cur.roc.score}p!`;
-  } else {
-    leaderTag.textContent = `🤝 Helt jämnt!`;
-  }
-
-  const listEl = document.getElementById('leaderboardList');
-  listEl.innerHTML = '';
-
-  // Visa avslutade veckors vinnare överst
-  const pastKeys = Object.keys(allWeeks).filter(k => k !== currentWeekKey).sort().reverse().slice(0, 3);
-  pastKeys.forEach(k => {
-    const wk = allWeeks[k];
-    const winnerText = wk.roc.score > wk.aura.score
-      ? `🐭 Roc (${wk.roc.score}p vs ${wk.aura.score}p)`
-      : wk.aura.score > wk.roc.score
-        ? `🐹 Aura (${wk.aura.score}p vs ${wk.roc.score}p)`
-        : `🤝 Oavgjort (${wk.roc.score}p)`;
-    const row = document.createElement('div');
-    row.className = 'lb-row';
-    row.style.borderLeft = "3px solid #38bdf8";
-    row.innerHTML = `<div>🏅 <b>${wk.label}:</b> ${winnerText}</div><div style="color:#38bdf8; font-size:11px;">Vinnare</div>`;
-    listEl.appendChild(row);
-  });
-
-  // Visa senaste omgångarna
-  recentRuns.slice(0, 5).forEach(rec => {
-    const row = document.createElement('div');
-    row.className = 'lb-row' + (rec.id === currentRunId ? ' current-run' : '');
-    row.innerHTML = `
-      <div>${rec.mouse} <b>${rec.name}</b> <span style="color:#94a3b8; font-size:11px;">(${rec.date})</span></div>
-      <div style="font-weight:800; color:var(--accent);">${rec.score} p</div>
-    `;
-    listEl.appendChild(row);
-  });
 }
 
 function finishGame(emoji, title, reason) {
