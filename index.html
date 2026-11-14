@@ -998,7 +998,7 @@ async function callGeminiForQuestions(promptText) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 22000);
 
-  let targetModel = "models/gemini-2.5-flash";
+  let targetModel = "models/gemini-3.8-flash";
   try {
     const listRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(geminiApiKey)}`,
