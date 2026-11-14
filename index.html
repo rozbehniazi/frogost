@@ -706,7 +706,7 @@
       </div>
 
       <div class="home-footer-bar">
-        <span class="version-label">Version 1</span>
+        <span class="version-label">Version 2</span>
         <button id="openSettingsBtn" class="bottom-gear-btn" title="Inställningar">⚙️</button>
       </div>
     </div>
@@ -1314,7 +1314,7 @@ document.getElementById('testConnectionsBtn').addEventListener('click', async ()
 });
 
 /* ==========================================================================
-   6. RESILIENT GEMINI AI-MOTOR (STRICT JSON + AUTOMATISK RESERVVÄXLING)
+   6. GEMINI AI-MOTOR (UTAN STRICT JSON-MODE FÖR MAXIMAL KOMPATIBILITET)
    ========================================================================== */
 async function callGeminiForQuestions(promptText, statusCallback = null) {
   if (!geminiApiKey) throw new Error("Ingen Gemini API-nyckel sparad (klicka på ⚙️ på startsidan).");
@@ -1368,8 +1368,7 @@ async function callGeminiForQuestions(promptText, statusCallback = null) {
           body: JSON.stringify({
             contents: [{ parts: [{ text: promptText }] }],
             generationConfig: {
-              temperature: 0.7,
-              responseMimeType: "application/json"
+              temperature: 0.7
             }
           })
         }
@@ -1428,7 +1427,7 @@ async function prefetchAiCurriculumQuestions() {
 4 frågor med "difficulty": "easy" och 4 frågor med "difficulty": "hard".
 Undvik att upprepa: [${recentAvoid}].
 Det RÄTTA svaret ska alltid ligga på index 0 i "options" (exakt 4 alternativ).
-Svara ENDAST med en JSON-array:
+Svara ENDAST med en giltig JSON-array utan markdown eller extra text:
 [{"subject":"${selectedSubject === 'blandat' ? 'matematik' : selectedSubject}","difficulty":"easy","q":"Fråga?","options":["Rätt","Fel1","Fel2","Fel3"],"answer":0}]`;
 
   try {
@@ -1483,7 +1482,7 @@ document.getElementById('generateAiBtn').addEventListener('click', async () => {
   const prompt = `Skapa 8 unika, djupa och varierande flervalsfrågor på svenska om "${topic}" anpassade för ${levelDesc}.
 4 frågor med "difficulty": "easy" och 4 frågor med "difficulty": "hard".
 Det RÄTTA svaret ska alltid ligga på index 0 i "options" (exakt 4 alternativ).
-Svara ENDAST med en giltig JSON-array:
+Svara ENDAST med en giltig JSON-array utan markdown eller extra text:
 [{"subject":"custom","difficulty":"easy","q":"Fråga?","options":["Rätt","Fel1","Fel2","Fel3"],"answer":0}]`;
 
   genBtn.disabled = true;
