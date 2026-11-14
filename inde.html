@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Ostjakten Åk 7" />
+  <title>Ostjakten – Årskurs 7</title>
+  <style>
+    :root {
+      --bg-dark: #1e293b;
+      --bg-card: #334155;
+      --accent: #facc15;
+      --accent-hard: #f97316;
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* HUD Top Bar */
+    #hud {
+      position: fixed;
+      top: env(safe-area-inset-top, 12px);
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .hud-box {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      padding: 8px 14px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 15px;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #muteBtn {
+      pointer-events: auto;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 16px;
+    }
+
+    /* Screens / Overlays */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 20;
+      overflow-y: auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 28px;
+      color: var(--accent);
+    }
+
+    p.subtitle {
+      margin: 0 0 20px 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      background: #475569;
+      color: white;
+      border: none;
+      padding: 14px 12px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0f172a;
+      width: 100%;
+      font-size: 17px;
+      padding: 16px;
+      margin-top: 8px;
+    }
+
+    .btn-secondary {
+      background: #0ea5e9;
+      color: white;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .btn.selected {
+      background: var(--accent);
+      color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.4);
+    }
+
+    /* Quiz Modal */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .badge-easy {
+      background: rgba(250, 204, 21, 0.2);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .badge-hard {
+      background: rgba(249, 115, 22, 0.2);
+      color: var(--accent-hard);
+      border: 1px solid var(--accent-hard);
+    }
+
+    #questionText {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 8px 0 18px 0;
+      line-height: 1.4;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background: #1e293b;
+      border: 2px solid #475569;
+      color: white;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .option-btn.correct {
+      background: var(--success);
+      border-color: var(--success);
+      color: #052e16;
+    }
+
+    .option-btn.wrong {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: white;
+    }
+
+    /* Custom JSON Import Modal */
+    textarea {
+      width: 100%;
+      height: 120px;
+      background: #0f172a;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 12px;
+      font-family: monospace;
+      margin-top: 8px;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: space-around;
+      background: rgba(15,23,42,0.5);
+      padding: 10px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div class="hud-box">
+      <span>🧀 <span id="scoreDisplay">0</span></span>
+      <span>|</span>
+      <span id="distanceDisplay">Avstånd: Säkert</span>
+    </div>
+    <button id="muteBtn" aria-label="Ljud">🔊</button>
+  </div>
+
+  <!-- Canvas -->
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- Start Screen -->
+  <div id="startScreen" class="overlay">
+    <div class="card">
+      <h1>🐭 Ostjakten Åk 7</h1>
+      <p class="subtitle">Hoppa över fällor, samla ost och svara rätt på skolfrågor för att hålla katten borta!</p>
+      
+      <div class="legend">
+        <div>🧀 Liten ost = Lätt (+100p)</div>
+        <div>👑 Stor ost = Svår (+300p)</div>
+      </div>
+
+      <p style="font-size:13px; font-weight:700; margin-bottom:8px; text-align:left;">Välj ämne (Årskurs 7):</p>
+      <div class="subject-grid" id="subjectGrid">
+        <button class="btn selected" data-subject="blandat">🎲 Blandat</button>
+        <button class="btn" data-subject="matematik">📐 Matematik</button>
+        <button class="btn" data-subject="no">🧬 NO (Bio/Fys/Kem)</button>
+        <button class="btn" data-subject="so">🌍 SO (His/Geo/Sam)</button>
+        <button class="btn" data-subject="svenska">📚 Svenska</button>
+        <button class="btn" data-subject="engelska">🇬🇧 Engelska</button>
+        <button class="btn" data-subject="custom" id="customSubjectBtn" style="grid-column: span 2;">✨ Eget ämne (0 frågor)</button>
+      </div>
+
+      <button class="btn btn-primary" id="startBtn">STARTA JAKTEN ▶</button>
+      <button class="btn btn-secondary" id="openCustomModalBtn">➕ Lägg till eget ämne (Kopiera & Klistra)</button>
+    </div>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="quizScreen" class="overlay hidden">
+    <div class="card">
+      <div id="difficultyBadge" class="badge badge-easy">Lätt fråga • +100p</div>
+      <div style="font-size:12px; color:#94a3b8;" id="subjectLabel">Matematik</div>
+      <div id="questionText">Frågetext hamnar här?</div>
+      <div class="options-list" id="optionsList"></div>
+    </div>
+  </div>
+
+  <!-- Custom Topic Modal (Option B) -->
+  <div id="customModal" class="overlay hidden">
+    <div class="card" style="text-align:left;">
+      <h2 style="margin-top:0; color:var(--accent); font-size:20px;">✨ Skapa eget ämne</h2>
+      <p style="font-size:13px; color:var(--text-muted); line-height:1.4;">
+        1. Kopiera instruktionen nedan och klistra in den i en AI-chatt (t.ex. Gemini) med ditt valfria ämne.<br>
+        2. Klistra in svaret i rutan längst ner.
+      </p>
+      <button class="btn btn-secondary" id="copyPromptBtn" style="margin-top:4px;">📋 Kopiera AI-prompt</button>
+      <p id="copyFeedback" style="font-size:12px; color:var(--success); margin:6px 0 0 0; display:none;">Prompt kopierad! Byt ut [ÄMNE] när du klistrar in.</p>
+      
+      <textarea id="customJsonInput" placeholder='Klistra in JSON-koden här (börjar med [ och slutar med ])...'></textarea>
+      <p id="jsonError" style="font-size:12px; color:var(--danger); display:none; margin:4px 0;">Ogiltigt format. Kontrollera att du kopierat hela koden.</p>
+
+      <div style="display:flex; gap:10px; margin-top:12px;">
+        <button class="btn" id="closeCustomModalBtn" style="flex:1;">Avbryt</button>
+        <button class="btn btn-primary" id="saveCustomBtn" style="flex:2; margin-top:0;">Spara frågor</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="gameOverScreen" class="overlay hidden">
+    <div class="card">
+      <div style="font-size:48px; margin-bottom:8px;">😼</div>
+      <h1 style="color:var(--danger);">Katten tog dig!</h1>
+      <p class="subtitle" id="gameOverReason">Katten kom ikapp musen.</p>
+      <div style="background:#1e293b; padding:16px; border-radius:14px; margin-bottom:20px;">
+        <div style="font-size:13px; color:var(--text-muted);">Din poäng</div>
+        <div style="font-size:32px; font-weight:800; color:var(--accent);" id="finalScore">0</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">Rekord: <span id="highScore">0</span></div>
+      </div>
+      <button class="btn btn-primary" id="restartBtn">SPELA IGEN 🔄</button>
+      <button class="btn" id="menuBtn" style="width:100%; margin-top:10px;">Byt ämne</button>
+    </div>
+  </div>
+
+<script>
+/* ==========================================================================
+   1. FRÅGEBANK – ÅRSKURS 7 (SVENSKA LÄROPLANEN LGR22)
+   ========================================================================== */
+const DEFAULT_QUESTIONS = [
+  // MATEMATIK - LÄTT
+  { subject: "matematik", difficulty: "easy", q: "Vad är 25 % av 80?", options: ["20", "15", "25", "40"], answer: 0 },
+  { subject: "matematik", difficulty: "easy", q: "Vilket tal är störst: -3 eller -8?", options: ["-3", "-8", "De är lika stora", "0 är mindre än båda"], answer: 0 },
+  { subject: "matematik", difficulty: "easy", q: "Vad är 3² + 4?", options: ["13", "10", "16", "25"], answer: 0 },
+  { subject: "matematik", difficulty: "easy", q: "Hur många grader är vinkelsumman i en triangel?", options: ["180°", "360°", "90°", "270°"], answer: 0 },
+  { subject: "matematik", difficulty: "easy", q: "Lös ekvationen: 3x + 2 = 14", options: ["x = 4", "x = 5", "x = 3", "x = 12"], answer: 0 },
+  // MATEMATIK - SVÅR
+  { subject: "matematik", difficulty: "hard", q: "Vad blir (-4) · (-5) - 6?", options: ["14", "-26", "26", "-14"], answer: 0 },
+  { subject: "matematik", difficulty: "hard", q: "En tröja kostar 400 kr och reas ut med 30 %. Vad är det nya priset?", options: ["280 kr", "370 kr", "120 kr", "310 kr"], answer: 0 },
+  { subject: "matematik", difficulty: "hard", q: "Skriv 0,0045 i grundpotensform.", options: ["4,5 · 10⁻³", "4,5 · 10³", "45 · 10⁻⁴", "4,5 · 10⁻²"], answer: 0 },
+  { subject: "matematik", difficulty: "hard", q: "Beräkna 2/3 + 1/6.", options: ["5/6", "3/9", "3/6", "1/2"], answer: 0 },
+
+  // NO (BIOLOGI, FYSIK, KEMI) - LÄTT
+  { subject: "no", difficulty: "easy", q: "Vilken del av cellen fungerar som cellens 'kraftverk'?", options: ["Mitokondrien", "Cellkärnan", "Kloroplasten", "Cellmembranet"], answer: 0 },
+  { subject: "no", difficulty: "easy", q: "Vilket grundämne har den kemiska beteckningen Fe?", options: ["Järn", "Fluor", "Fosfor", "Silver"], answer: 0 },
+  { subject: "no", difficulty: "easy", q: "Vad mäts kraft i?", options: ["Newton (N)", "Joule (J)", "Watt (W)", "Pascal (Pa)"], answer: 0 },
+  { subject: "no", difficulty: "easy", q: "Vad kallas processen när växter omvandlar solljus till socker och syre?", options: ["Fotosyntes", "Cellandning", "Förbränning", "Osmos"], answer: 0 },
+  // NO - SVÅR
+  { subject: "no", difficulty: "hard", q: "Vilka partiklar finns i en atoms kärna?", options: ["Protoner och neutroner", "Endast elektroner", "Protoner och elektroner", "Neutroner och elektroner"], answer: 0 },
+  { subject: "no", difficulty: "hard", q: "Om en bil kör 120 km på 1,5 timmar, vad är medelhastigheten?", options: ["80 km/h", "60 km/h", "90 km/h", "100 km/h"], answer: 0 },
+  { subject: "no", difficulty: "hard", q: "Vad har en sur lösning för pH-värde?", options: ["Under 7", "Exakt 7", "Över 7", "Mellan 10 och 14"], answer: 0 },
+  { subject: "no", difficulty: "hard", q: "Vilket organ producerar insulin i människokroppen?", options: ["Bukspottkörteln", "Levern", "Njurarna", "Sköldkörteln"], answer: 0 },
+
+  // SO (HISTORIA, GEOGRAFI, SAMHÄLLSKUNSKAP, RELIGION) - LÄTT
+  { subject: "so", difficulty: "easy", q: "Hur många ledamöter sitter i Sveriges riksdag?", options: ["349", "250", "400", "175"], answer: 0 },
+  { subject: "so", difficulty: "easy", q: "Vilken världsreligion har Koranen som helig skrift?", options: ["Islam", "Judendom", "Kristendom", "Hinduism"], answer: 0 },
+  { subject: "so", difficulty: "easy", q: "Vilken är världens längsta flod?", options: ["Nilen", "Amazonfloden", "Yangtze", "Mississippi"], answer: 0 },
+  { subject: "so", difficulty: "easy", q: "Under vilket århundrade var Sverige en stormakt i Europa?", options: ["1600-talet", "1800-talet", "1400-talet", "1900-talet"], answer: 0 },
+  // SO - SVÅR
+  { subject: "so", difficulty: "hard", q: "Vad innebär begreppet 'merkantilism' under 1600- och 1700-talet?", options: ["Att ett land ska exportera mer än det importerar", "Att all handel ska vara helt fri utan tullar", "Att bönderna äger all jord gemensamt", "Att kungen avsäger sig all ekonomisk makt"], answer: 0 },
+  { subject: "so", difficulty: "hard", q: "Vilken instans stiftar lagarna i Sverige?", options: ["Riksdagen", "Regeringen", "Högsta domstolen", "Kungen"], answer: 0 },
+  { subject: "so", difficulty: "hard", q: "Vad kallas den linje vid 0 graders breddgrad som delar jorden i norra och södra halvklotet?", options: ["Ekvatorn", "Nollmeridianen", "Kräftans vändkrets", "Polcirkeln"], answer: 0 },
+
+  // SVENSKA - LÄTT
+  { subject: "svenska", difficulty: "easy", q: "Vilken ordklass tillhör orden: springa, sova, tänka?", options: ["Verb", "Substantiv", "Adjektiv", "Pronomen"], answer: 0 },
+  { subject: "svenska", difficulty: "easy", q: "Vad kallas en liknelse utan orden 'som' eller 'liksom' (t.ex. 'Du är en stjärna')?", options: ["Metafor", "Allitteration", "Hyperbol", "Ironi"], answer: 0 },
+  { subject: "svenska", difficulty: "easy", q: "Vilket är subjektet i meningen: 'Den svarta katten jagar musen'?", options: ["Den svarta katten", "jagar", "musen", "svarta"], answer: 0 },
+  // SVENSKA - SVÅR
+  { subject: "svenska", difficulty: "hard", q: "Vilket av följande är ett nordiskt grannspråk som tillhör den finsk-ugriska språkfamiljen?", options: ["Finska", "Danska", "Norska", "Isländska"], answer: 0 },
+  { subject: "svenska", difficulty: "hard", q: "Vad kallas ett ord som stavas likadant baklänges som framlänges (t.ex. 'naturrutan')?", options: ["Palindrom", "Synonym", "Homonym", "Akronym"], answer: 0 },
+
+  // ENGELSKA - LÄTT
+  { subject: "engelska", difficulty: "easy", q: "Vilken form är rätt: 'She ___ to school every day.'", options: ["goes", "go", "going", "gone"], answer: 0 },
+  { subject: "engelska", difficulty: "easy", q: "Vad heter 'bibliotek' på engelska?", options: ["Library", "Bookshop", "Magazine", "Cabinet"], answer: 0 },
+  // ENGELSKA - SVÅR
+  { subject: "engelska", difficulty: "hard", q: "Vilken är rätt preteritum-form (dåtid) av verbet 'to catch'?", options: ["caught", "catched", "catch", "catching"], answer: 0 },
+  { subject: "engelska", difficulty: "hard", q: "Välj rätt ord: 'I have lived in Sweden ___ five years.'", options: ["for", "since", "during", "from"], answer: 0 }
+];
+
+/* ==========================================================================
+   2. WEB AUDIO SYNTHESIZER (LJUDEFFEKTER UTAN EXTERNA FILER)
+   ========================================================================== */
+class SoundFX {
+  constructor() {
+    this.ctx = null;
+    this.muted = false;
+  }
+  init() {
+    if (!this.ctx) {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+  }
+  playTone(freq, type, duration, slideTo = null) {
+    if (this.muted || !this.ctx) return;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+    if (slideTo) {
+      osc.frequency.exponentialRampToValueAtTime(slideTo, this.ctx.currentTime + duration);
+    }
+    gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + duration);
+  }
+  jump() { this.playTone(260, 'sine', 0.18, 540); }
+  cheese() { this.playTone(520, 'triangle', 0.12, 880); }
+  correct() {
+    this.playTone(523.25, 'sine', 0.12);
+    setTimeout(() => this.playTone(659.25, 'sine', 0.12), 90);
+    setTimeout(() => this.playTone(783.99, 'sine', 0.25), 180);
+  }
+  wrong() {
+    this.playTone(300, 'sawtooth', 0.2, 140);
+  }
+  meow() {
+    this.playTone(620, 'triangle', 0.35, 340);
+  }
+}
+const sfx = new SoundFX();
+
+/* ==========================================================================
+   3. SPELMOTOR & LOGIK
+   ========================================================================== */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+let width, height, groundY;
+function resize() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  groundY = height * 0.76;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// Tillstånd
+let gameState = 'MENU'; // MENU, PLAYING, QUIZ, GAMEOVER
+let selectedSubject = 'blandat';
+let customQuestions = JSON.parse(localStorage.getItem('ostjakten_custom_q') || '[]');
+let highScore = parseInt(localStorage.getItem('ostjakten_highscore') || '0', 10);
+
+let score = 0;
+let speed = 5.5;
+let frameCount = 0;
+let catDangerLevel = 0; // 0 = Säkert, 1 = Nära, 2 = Mycket nära, 3 = Fångad!
+let usedQuestionIndices = new Set();
+
+// Spelobjekt
+const mouse = {
+  x: 0,
+  y: 0,
+  vy: 0,
+  radius: 22,
+  jumps: 0,
+  maxJumps: 2,
+  invulnerableTimer: 0
+};
+
+let obstacles = [];
+let cheeses = [];
+let particles = [];
+let bgOffset = 0;
+
+function updateCustomButtonLabel() {
+  const btn = document.getElementById('customSubjectBtn');
+  btn.textContent = `✨ Eget ämne (${customQuestions.length} frågor)`;
+}
+updateCustomButtonLabel();
+
+// Välj ämne
+document.querySelectorAll('#subjectGrid .btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.subject === 'custom' && customQuestions.length === 0) {
+      openCustomModal();
+      return;
+    }
+    document.querySelectorAll('#subjectGrid .btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedSubject = btn.dataset.subject;
+  });
+});
+
+// Starta spel
+document.getElementById('startBtn').addEventListener('click', () => {
+  sfx.init();
+  startGame();
+});
+
+document.getElementById('restartBtn').addEventListener('click', () => {
+  sfx.init();
+  startGame();
+});
+
+document.getElementById('menuBtn').addEventListener('click', () => {
+  document.getElementById('gameOverScreen').classList.add('hidden');
+  document.getElementById('hud').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+  gameState = 'MENU';
+});
+
+document.getElementById('muteBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  sfx.muted = !sfx.muted;
+  e.target.textContent = sfx.muted ? '🔇' : '🔊';
+});
+
+function startGame() {
+  score = 0;
+  speed = Math.max(5.5, width * 0.008);
+  catDangerLevel = 0;
+  obstacles = [];
+  cheeses = [];
+  particles = [];
+  usedQuestionIndices.clear();
+
+  mouse.x = Math.min(width * 0.36, 170);
+  mouse.y = groundY - mouse.radius;
+  mouse.vy = 0;
+  mouse.jumps = 0;
+  mouse.invulnerableTimer = 0;
+
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('gameOverScreen').classList.add('hidden');
+  document.getElementById('hud').classList.remove('hidden');
+
+  updateHUD();
+  gameState = 'PLAYING';
+}
+
+function updateHUD() {
+  document.getElementById('scoreDisplay').textContent = score;
+  const distEl = document.getElementById('distanceDisplay');
+  if (catDangerLevel === 0) {
+    distEl.textContent = "Katten: Långt bakom 🟢";
+    distEl.style.color = "#4ade80";
+  } else if (catDangerLevel === 1) {
+    distEl.textContent = "Katten: Närmar sig 🟡";
+    distEl.style.color = "#facc15";
+  } else {
+    distEl.textContent = "Katten: Precis bakom! 🔴";
+    distEl.style.color = "#f87171";
+  }
+}
+
+// Hoppa (Touch / Klick / Mellanslag)
+function jump() {
+  if (gameState !== 'PLAYING') return;
+  if (mouse.jumps < mouse.maxJumps) {
+    mouse.vy = -13.5;
+    mouse.jumps++;
+    sfx.jump();
+    spawnParticles(mouse.x, mouse.y + mouse.radius, '#cbd5e1', 6);
+  }
+}
+
+window.addEventListener('pointerdown', (e) => {
+  if (e.target.tagName === 'BUTTON' || e.target.tagName === 'TEXTAREA') return;
+  jump();
+});
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' || e.code === 'ArrowUp') jump();
+});
+
+function spawnParticles(x, y, color, count) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 6,
+      vy: (Math.random() - 0.8) * 6,
+      life: 25,
+      color
+    });
+  }
+}
+
+/* ==========================================================================
+   4. FRÅGESYSTEM & QUIZ-HANTERING
+   ========================================================================== */
+function getQuestionPool(difficulty) {
+  let pool = selectedSubject === 'custom' ? customQuestions : DEFAULT_QUESTIONS;
+  if (selectedSubject !== 'blandat' && selectedSubject !== 'custom') {
+    pool = pool.filter(q => q.subject === selectedSubject);
+  }
+  let filtered = pool.filter(q => q.difficulty === difficulty);
+  if (filtered.length === 0) filtered = pool; // Fallback om eget ämne saknar nivå
+  return filtered;
+}
+
+function triggerQuiz(isHard) {
+  gameState = 'QUIZ';
+  sfx.cheese();
+
+  const difficulty = isHard ? 'hard' : 'easy';
+  const pool = getQuestionPool(difficulty);
+  const qObj = pool[Math.floor(Math.random() * pool.length)];
+
+  const badge = document.getElementById('difficultyBadge');
+  if (isHard) {
+    badge.textContent = "👑 Stor ost • Svår fråga (+300p)";
+    badge.className = "badge badge-hard";
+  } else {
+    badge.textContent = "🧀 Liten ost • Lätt fråga (+100p)";
+    badge.className = "badge badge-easy";
+  }
+
+  const subjectNames = {
+    matematik: "Matematik",
+    no: "NO (Biologi/Fysik/Kemi)",
+    so: "SO (Historia/Geografi/Samhälle)",
+    svenska: "Svenska",
+    engelska: "Engelska",
+    custom: "Eget ämne"
+  };
+  document.getElementById('subjectLabel').textContent = subjectNames[qObj.subject] || "Skolfråga Åk 7";
+  document.getElementById('questionText').textContent = qObj.q;
+
+  // Blanda svarsalternativen
+  const indexedOptions = qObj.options.map((text, idx) => ({ text, isCorrect: idx === qObj.answer }));
+  indexedOptions.sort(() => Math.random() - 0.5);
+
+  const listEl = document.getElementById('optionsList');
+  listEl.innerHTML = '';
+
+  let answered = false;
+  indexedOptions.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt.text;
+    btn.addEventListener('click', () => {
+      if (answered) return;
+      answered = true;
+
+      if (opt.isCorrect) {
+        btn.classList.add('correct');
+        sfx.correct();
+        score += isHard ? 300 : 100;
+        if (catDangerLevel > 0) catDangerLevel--;
+        speed += 0.25;
+        spawnParticles(mouse.x, mouse.y, '#facc15', 18);
+      } else {
+        btn.classList.add('wrong');
+        // Visa rätt svar
+        Array.from(listEl.children).forEach((b, i) => {
+          if (indexedOptions[i].isCorrect) b.classList.add('correct');
+        });
+        sfx.wrong();
+        sfx.meow();
+        catDangerLevel++;
+      }
+
+      updateHUD();
+
+      setTimeout(() => {
+        document.getElementById('quizScreen').classList.add('hidden');
+        if (catDangerLevel >= 3) {
+          endGame("Du svarade fel och katten kom ikapp!");
+        } else {
+          mouse.invulnerableTimer = 60;
+          gameState = 'PLAYING';
+        }
+      }, 1150);
+    });
+    listEl.appendChild(btn);
+  });
+
+  document.getElementById('quizScreen').classList.remove('hidden');
+}
+
+function endGame(reason) {
+  gameState = 'GAMEOVER';
+  if (score > highScore) {
+    highScore = score;
+    localStorage.setItem('ostjakten_highscore', highScore);
+  }
+  document.getElementById('gameOverReason').textContent = reason;
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('highScore').textContent = highScore;
+  document.getElementById('gameOverScreen').classList.remove('hidden');
+}
+
+/* ==========================================================================
+   5. SPEL-LOOP & GRAFIK (CANVAS)
+   ========================================================================== */
+function update() {
+  if (gameState !== 'PLAYING') return;
+  frameCount++;
+
+  // Bakgrundsscroll
+  bgOffset = (bgOffset + speed * 0.5) % 80;
+
+  // Musens fysik
+  mouse.vy += 0.68; // Gravitation
+  mouse.y += mouse.vy;
+  if (mouse.y >= groundY - mouse.radius) {
+    mouse.y = groundY - mouse.radius;
+    mouse.vy = 0;
+    mouse.jumps = 0;
+  }
+  if (mouse.invulnerableTimer > 0) mouse.invulnerableTimer--;
+
+  // Skapa fällor (hinder)
+  if (frameCount % Math.max(75, Math.floor(135 - speed * 4)) === 0) {
+    obstacles.push({
+      x: width + 40,
+      y: groundY - 26,
+      w: 34,
+      h: 26,
+      type: Math.random() > 0.5 ? 'trap' : 'book'
+    });
+  }
+
+  // Skapa ostar (små = lätta, stora = svåra)
+  if (frameCount % 165 === 0) {
+    const isHard = Math.random() > 0.55;
+    const flyHigh = Math.random() > 0.45;
+    cheeses.push({
+      x: width + 60,
+      y: flyHigh ? groundY - 115 : groundY - 35,
+      radius: isHard ? 24 : 16,
+      isHard
+    });
+  }
+
+  // Uppdatera hinder & kollision
+  for (let i = obstacles.length - 1; i >= 0; i--) {
+    const obs = obstacles[i];
+    obs.x -= speed;
+
+    // Kollision
+    if (
+      mouse.invulnerableTimer === 0 &&
+      mouse.x + mouse.radius * 0.7 > obs.x &&
+      mouse.x - mouse.radius * 0.7 < obs.x + obs.w &&
+      mouse.y + mouse.radius * 0.8 > obs.y
+    ) {
+      obstacles.splice(i, 1);
+      sfx.wrong();
+      sfx.meow();
+      catDangerLevel++;
+      mouse.invulnerableTimer = 70;
+      spawnParticles(mouse.x, mouse.y, '#ef4444', 12);
+      updateHUD();
+      if (catDangerLevel >= 3) {
+        endGame("Du fastnade i en fälla och katten tog dig!");
+        return;
+      }
+      continue;
+    }
+    if (obs.x + obs.w < 0) obstacles.splice(i, 1);
+  }
+
+  // Uppdatera ostar & kollision
+  for (let i = cheeses.length - 1; i >= 0; i--) {
+    const ch = cheeses[i];
+    ch.x -= speed;
+
+    const dx = mouse.x - ch.x;
+    const dy = mouse.y - ch.y;
+    const dist = Math.hypot(dx, dy);
+
+    if (dist < mouse.radius + ch.radius) {
+      cheeses.splice(i, 1);
+      triggerQuiz(ch.isHard);
+      return;
+    }
+    if (ch.x + ch.radius < 0) cheeses.splice(i, 1);
+  }
+
+  // Partiklar
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life--;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+}
+
+function draw() {
+  // Himmel / Bakgrund
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(0, 0, width, height);
+
+  // Bakgrundsdetaljer (Bokhyllor / Väggpaneler)
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 2;
+  for (let x = -bgOffset; x < width; x += 80) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, groundY);
+    ctx.stroke();
+  }
+
+  // Golv
+  ctx.fillStyle = '#0f172a';
+  ctx.fillRect(0, groundY, width, height - groundY);
+  ctx.fillStyle = '#334155';
+  ctx.fillRect(0, groundY, width, 6);
+
+  // Rita hinder (Råttfällor & Böcker)
+  obstacles.forEach(obs => {
+    if (obs.type === 'trap') {
+      ctx.fillStyle = '#b45309';
+      ctx.fillRect(obs.x, obs.y + 14, obs.w, 12);
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(obs.x + obs.w / 2, obs.y + 14, 12, Math.PI, 0);
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = '#dc2626';
+      ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(obs.x + 4, obs.y + 4, obs.w - 8, 5);
+    }
+  });
+
+  // Rita ostar
+  cheeses.forEach(ch => {
+    ctx.save();
+    ctx.translate(ch.x, ch.y + Math.sin(frameCount * 0.1) * 4);
+    if (ch.isHard) {
+      // Glödande aura för stor/svår ost
+      ctx.shadowColor = '#f97316';
+      ctx.shadowBlur = 15;
+    }
+    ctx.fillStyle = ch.isHard ? '#fb923c' : '#facc15';
+    ctx.beginPath();
+    ctx.moveTo(-ch.radius, ch.radius * 0.6);
+    ctx.lineTo(ch.radius, ch.radius * 0.6);
+    ctx.lineTo(0, -ch.radius * 0.8);
+    ctx.closePath();
+    ctx.fill();
+
+    // Hål i osten
+    ctx.fillStyle = '#ca8a04';
+    ctx.beginPath();
+    ctx.arc(-3, 3, ch.radius * 0.18, 0, Math.PI * 2);
+    ctx.arc(5, 6, ch.radius * 0.12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  // Rita Katten (position beror på catDangerLevel)
+  const catTargetX = catDangerLevel === 0 ? 35 : (catDangerLevel === 1 ? mouse.x - 95 : mouse.x - 52);
+  const catY = groundY - 32 + Math.abs(Math.sin(frameCount * 0.25)) * -6;
+  ctx.font = '54px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.save();
+  ctx.scale(-1, 1); // Vänd katten mot höger
+  ctx.fillText('🐈‍⬛', -catTargetX, catY);
+  ctx.restore();
+
+  // Rita Musen
+  if (mouse.invulnerableTimer % 6 < 3) {
+    ctx.font = '42px serif';
+    ctx.save();
+    ctx.translate(mouse.x, mouse.y);
+    ctx.scale(-1, 1); // Vänd musen åt höger
+    ctx.fillText('🐭', 0, 0);
+    ctx.restore();
+  }
+
+  // Partiklar
+  particles.forEach(p => {
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, 5, 5);
+  });
+}
+
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+loop();
+
+/* ==========================================================================
+   6. HANTERING AV EGET ÄMNE (OPZIONE B - KOPIERA & KLISTRA IN)
+   ========================================================================== */
+const AI_PROMPT_TEMPLATE = `Skapa 10 flervalsfrågor på svenska anpassade för årskurs 7 (13 år) om ämnet: [ÄMNE].
+5 frågor ska ha "difficulty": "easy" och 5 frågor ska ha "difficulty": "hard".
+Svara ENDAST med giltig JSON i exakt detta format utan extra text:
+[
+  {
+    "subject": "custom",
+    "difficulty": "easy",
+    "q": "Frågan här?",
+    "options": ["Rätt svar", "Fel 1", "Fel 2", "Fel 3"],
+    "answer": 0
+  }
+]`;
+
+function openCustomModal() {
+  document.getElementById('customModal').classList.remove('hidden');
+  document.getElementById('jsonError').style.display = 'none';
+  document.getElementById('copyFeedback').style.display = 'none';
+}
+
+document.getElementById('openCustomModalBtn').addEventListener('click', openCustomModal);
+document.getElementById('closeCustomModalBtn').addEventListener('click', () => {
+  document.getElementById('customModal').classList.add('hidden');
+});
+
+document.getElementById('copyPromptBtn').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(AI_PROMPT_TEMPLATE);
+    document.getElementById('copyFeedback').style.display = 'block';
+  } catch (err) {
+    alert("Kopiera manuellt:\n\n" + AI_PROMPT_TEMPLATE);
+  }
+});
+
+document.getElementById('saveCustomBtn').addEventListener('click', () => {
+  const raw = document.getElementById('customJsonInput').value.trim();
+  const errEl = document.getElementById('jsonError');
+  try {
+    // Rensa bort eventuella ```json markeringar
+    const cleaned = raw.replace(/^```json/i, '').replace(/^```/, '').replace(/```$/, '').trim();
+    const parsed = JSON.parse(cleaned);
+    if (!Array.isArray(parsed) || parsed.length === 0 || !parsed[0].q || !Array.isArray(parsed[0].options)) {
+      throw new Error("Ogiltig struktur");
+    }
+    customQuestions = parsed.map(item => ({
+      subject: "custom",
+      difficulty: item.difficulty === "hard" ? "hard" : "easy",
+      q: item.q,
+      options: item.options,
+      answer: typeof item.answer === 'number' ? item.answer : 0
+    }));
+    localStorage.setItem('ostjakten_custom_q', JSON.stringify(customQuestions));
+    updateCustomButtonLabel();
+
+    // Välj automatiskt det egna ämnet
+    document.querySelectorAll('#subjectGrid .btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('customSubjectBtn').classList.add('selected');
+    selectedSubject = 'custom';
+
+    document.getElementById('customModal').classList.add('hidden');
+  } catch (e) {
+    errEl.style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>
