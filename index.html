@@ -9,7 +9,12 @@
   <link id="appleTouchIcon" rel="apple-touch-icon" href="" />
   <link id="faviconIcon" rel="icon" href="" />
   <title>Frågost</title>
+  <!-- PDF.js för att läsa PDF-filer direkt i webbläsaren på iPhone/Mac -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
     (function generateCheeseAppIcon() {
       const canvas = document.createElement('canvas');
       canvas.width = 512;
@@ -435,7 +440,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
     .btn {
@@ -451,6 +456,16 @@
 
     .btn:active { transform: scale(0.97); }
     .btn.selected { background: var(--accent); color: #0f172a; }
+
+    .btn-pdf-upload {
+      background: rgba(56, 189, 248, 0.16);
+      border: 1.5px dashed var(--info);
+      color: #7dd3fc;
+      width: 100%;
+      padding: 11px;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
 
     .btn-primary {
       background: var(--accent);
@@ -473,7 +488,7 @@
       margin-bottom: 8px;
     }
 
-    input[type="text"], input[type="password"], input[type="url"] {
+    input[type="text"], input[type="url"] {
       width: 100%;
       background: #0f172a;
       border: 2px solid #334155;
@@ -518,10 +533,10 @@
     .badge-calm { background: rgba(56, 189, 248, 0.16); color: var(--info); border: 1px solid rgba(56, 189, 248, 0.45); }
 
     #questionText {
-      font-size: 16.5px;
+      font-size: 16px;
       font-weight: 700;
       margin: 8px 0 12px 0;
-      line-height: 1.4;
+      line-height: 1.42;
     }
 
     .visual-box {
@@ -553,7 +568,7 @@
       color: white;
       padding: 12px 14px;
       border-radius: 14px;
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 600;
       text-align: left;
       cursor: pointer;
@@ -706,19 +721,19 @@
       </div>
 
       <div class="home-footer-bar">
-        <span class="version-label">Version 2</span>
+        <span class="version-label">Version 3</span>
         <button id="openSettingsBtn" class="bottom-gear-btn" title="Inställningar">⚙️</button>
       </div>
     </div>
   </div>
 
-  <!-- SKÄRM 2: ÄMNESVAL -->
+  <!-- SKÄRM 2: ÄMNESVAL & PDF-UPPLADDNING -->
   <div id="subjectScreen" class="overlay hidden">
     <div class="card">
       <button id="backToHomeBtn" class="top-back-btn">← Hem</button>
       <div style="font-size:44px; line-height:1.1; margin-top:4px;" id="chosenPlayerEmoji">🐹</div>
       <h2 style="margin:4px 0 2px 0; font-size:24px; color:var(--accent);" id="chosenPlayerTitle">Aura (Åk 7)</h2>
-      <p style="margin:0 0 10px 0; font-size:12.5px; color:#cbd5e1;">Välj skolämne eller skapa ett eget med AI</p>
+      <p style="margin:0 0 10px 0; font-size:12.5px; color:#cbd5e1;">Välj skolämne eller ladda upp en egen PDF (t.ex. Wikipedia)</p>
 
       <div class="rules-box">
         <div><span id="ruleMouseEmoji">🐹</span> <b>Musen:</b> +10p. 😼 <b>Katten:</b> Nollställer poäng (0p).</div>
@@ -734,8 +749,13 @@
         <button class="btn" data-subject="svenska">📚 Svenska</button>
         <button class="btn" data-subject="engelska">🇬🇧 Engelska</button>
         <button class="btn" data-subject="logik">🧠 Logik & Bild</button>
-        <button class="btn" data-subject="custom" id="customSubjectBtn">✨ Eget</button>
+        <button class="btn" data-subject="pdf" id="pdfSubjectBtn">📄 PDF-ämne</button>
       </div>
+
+      <!-- Dold filväljare + tydlig knapp för att ladda upp PDF -->
+      <input type="file" id="pdfFileInput" accept="application/pdf,.pdf" class="hidden" />
+      <button class="btn btn-pdf-upload" id="uploadPdfBtn">📄 Ladda upp PDF (t.ex. Wikipedia-sida)</button>
+      <div id="pdfStatusText" style="font-size:12px; color:var(--info); margin-bottom:8px; display:none; font-weight:700;"></div>
 
       <button class="btn btn-primary" id="startBtn">START</button>
     </div>
@@ -759,45 +779,20 @@
     </div>
   </div>
 
-  <!-- Custom Topic Modal -->
-  <div id="customModal" class="overlay hidden">
-    <div class="card" style="text-align:left;">
-      <h2 style="margin:0 0 6px 0; color:var(--accent); font-size:20px;">✨ Eget ämne med AI</h2>
-      <p style="font-size:13px; color:#cbd5e1; margin:0 0 10px 0; line-height:1.4;">
-        Skriv ett valfritt ämne (t.ex. <b>Vikingatiden</b>, <b>Astronomi</b>, <b>Bråk</b>). AI skapar nya frågor för <b id="modalPlayerName">Aura</b>!
-      </p>
-
-      <label style="font-size:12px; font-weight:700; color:#94a3b8;">Ämne eller tema:</label>
-      <input type="text" id="customTopicInput" placeholder="T.ex. Astronomi..." />
-
-      <p id="aiStatusMsg" style="font-size:12.5px; color:var(--danger); display:none; margin:10px 0 0 0; font-weight:600;"></p>
-
-      <div style="display:flex; gap:10px; margin-top:14px;">
-        <button class="btn" id="closeCustomModalBtn" style="flex:1;">Avbryt</button>
-        <button class="btn btn-primary" id="generateAiBtn" style="flex:2; margin-top:0; font-size:15px; padding:12px;">Skapa frågor ✨</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Settings Modal med Live-Diagnostik -->
+  <!-- Settings Modal (Firebase Synk) -->
   <div id="settingsModal" class="overlay hidden">
     <div class="card" style="text-align:left;">
-      <h2 style="margin:0 0 8px 0; color:var(--accent); font-size:20px;">⚙️ Inställningar & Synk</h2>
+      <h2 style="margin:0 0 8px 0; color:var(--accent); font-size:20px;">⚙️ Molnsynk mellan iPhones</h2>
 
       <div style="margin-bottom:10px; padding:10px; background:#0f172a; border-radius:12px; border:1px solid #334155;">
-        <label style="font-size:12px; font-weight:800; color:var(--info);">1. Google Gemini API-nyckel:</label>
-        <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..." />
-      </div>
-
-      <div style="margin-bottom:10px; padding:10px; background:#0f172a; border-radius:12px; border:1px solid #334155;">
-        <label style="font-size:12px; font-weight:800; color:#4ade80;">2. Firebase Realtime Database URL:</label>
+        <label style="font-size:12px; font-weight:800; color:#4ade80;">Firebase Realtime Database URL:</label>
         <input type="url" id="firebaseUrlInput" placeholder="https://ditt-projekt.europe-west1.firebasedatabase.app" />
         <p style="font-size:11px; color:#94a3b8; margin:5px 0 0 0;">
-          Måste sluta på <b>.firebasedatabase.app</b> eller <b>.firebaseio.com</b> (och Rules: read/write = true).
+          Synkar både <b>Veckans Pott</b> och dina <b>uppladdade PDF-frågor</b> automatiskt mellan Roc och Auras telefoner.
         </p>
       </div>
 
-      <button class="btn btn-test" id="testConnectionsBtn">🔍 Testa AI & Moln-anslutning</button>
+      <button class="btn btn-test" id="testConnectionsBtn">🔍 Testa Firebase-anslutning</button>
       <div id="diagResultBox" class="diag-box hidden"></div>
 
       <div style="display:flex; gap:10px; margin-top:6px;">
@@ -848,53 +843,88 @@
 
 <script>
 /* ==========================================================================
-   1. UTÖKADE RESERV-FRÅGEBANKER (LGR22 ÅK 3 & ÅK 7)
+   1. UTÖKADE SKOL-FRÅGEBANKER (LGR22 ÅK 3 & ÅK 7)
    ========================================================================== */
-const FALLBACK_AK3 = [
+const QUESTIONS_AK3 = [
   { subject: "matematik", difficulty: "easy", q: "Vad är 47 + 35?", options: ["82", "72", "92", "81"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Vilket tal är hälften av 64?", options: ["32", "34", "22", "128"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Hur många minuter är en timme och en kvart?", options: ["75 minuter", "65 minuter", "45 minuter", "90 minuter"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Vad är 6 · 7?", options: ["42", "36", "48", "49"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Hur många centimeter är 2 meter?", options: ["200 cm", "20 cm", "2000 cm", "100 cm"], answer: 0 },
+  { subject: "matematik", difficulty: "easy", q: "Vad är dubbelt så mycket som 38?", options: ["76", "66", "78", "68"], answer: 0 },
+  { subject: "matematik", difficulty: "easy", q: "Vilket tal saknas: 15, 20, 25, ___, 35?", options: ["30", "28", "40", "26"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "Du har 100 kr och köper en glass för 28 kr och ett äpple för 14 kr. Hur mycket får du tillbaka?", options: ["58 kr", "62 kr", "42 kr", "68 kr"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "En kvadrat har sidan 5 cm. Hur lång är hela omkretsen runt kvadraten?", options: ["20 cm", "25 cm", "10 cm", "15 cm"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "Ett tåg har 4 vagnar med 25 personer i varje vagn. Hur många åker med tåget?", options: ["100", "80", "75", "125"], answer: 0 },
+  { subject: "matematik", difficulty: "hard", q: "Dela 36 lika mellan 4 barn. Hur många får varje barn?", options: ["9", "8", "7", "6"], answer: 0 },
+  { subject: "matematik", difficulty: "hard", q: "Klockan är 14:40. Hur många minuter är det kvar till klockan 15:00?", options: ["20 minuter", "40 minuter", "10 minuter", "30 minuter"], answer: 0 },
+
   { subject: "no", difficulty: "easy", q: "Vad heter vår närmaste stjärna som ger jorden ljus och värme?", options: ["Solen", "Månen", "Polstjärnan", "Mars"], answer: 0 },
   { subject: "no", difficulty: "easy", q: "Hur många ben har en insekt (t.ex. en myra)?", options: ["6 ben", "8 ben", "4 ben", "10 ben"], answer: 0 },
+  { subject: "no", difficulty: "easy", q: "Vad händer med vatten när det blir kallare än 0 grader?", options: ["Det fryser till is", "Det börjar koka", "Det blir till ånga", "Ingenting händer"], answer: 0 },
   { subject: "no", difficulty: "hard", q: "Vad kallas djur som bara äter växter (t.ex. älg och hare)?", options: ["Växtätare", "Köttätare", "Allätare", "Rovdjur"], answer: 0 },
   { subject: "no", difficulty: "hard", q: "Vilket organ pumpar runt blodet i hela kroppen?", options: ["Hjärtat", "Lungorna", "Magsäcken", "Hjärnan"], answer: 0 },
+  { subject: "no", difficulty: "hard", q: "Varför flyter en kork i vatten?", options: ["Den har lägre densitet än vatten", "Den är rund", "Den är gjord av metall", "Vattnet är kallt"], answer: 0 },
+
   { subject: "so", difficulty: "easy", q: "Vad heter Sveriges huvudstad?", options: ["Stockholm", "Göteborg", "Malmö", "Uppsala"], answer: 0 },
+  { subject: "so", difficulty: "easy", q: "Vilket väderstreck pekar kompassnålen alltid mot?", options: ["Norr", "Söder", "Öster", "Väster"], answer: 0 },
   { subject: "so", difficulty: "hard", q: "Vilka två länder har landgräns mot Sverige?", options: ["Norge och Finland", "Danmark och Norge", "Finland och Ryssland", "Tyskland och Danmark"], answer: 0 },
   { subject: "so", difficulty: "hard", q: "Vilken är Sveriges största ö?", options: ["Gotland", "Öland", "Orust", "Hisingen"], answer: 0 },
+  { subject: "so", difficulty: "hard", q: "Vad kallas den tid för mycket länge sedan då man gjorde verktyg av sten?", options: ["Stenåldern", "Bronsåldern", "Järnåldern", "Vikingatiden"], answer: 0 },
+
   { subject: "svenska", difficulty: "easy", q: "Vilket ord är ett substantiv?", options: ["Hund", "Springa", "Glad", "Snabbt"], answer: 0 },
+  { subject: "svenska", difficulty: "easy", q: "Vilket tecken sätter man i slutet av en fråga?", options: ["Frågetecken (?)", "Utropstecken (!)", "Punkt (.)", "Kommatecken (,)"], answer: 0 },
   { subject: "svenska", difficulty: "hard", q: "Vilka bokstäver är vokaler i ordet 'SOLROS'?", options: ["O och O", "S, L och R", "S och O", "R och L"], answer: 0 },
+  { subject: "svenska", difficulty: "hard", q: "Vad är motsatsordet (antonymen) till 'modig'?", options: ["Rädd / feg", "Stark", "Snäll", "Arg"], answer: 0 },
+
   { subject: "engelska", difficulty: "easy", q: "Vad heter 'äpple' på engelska?", options: ["Apple", "Banana", "Orange", "Pear"], answer: 0 },
+  { subject: "engelska", difficulty: "easy", q: "Vilken färg är 'blue'?", options: ["Blå", "Grön", "Gul", "Röd"], answer: 0 },
   { subject: "engelska", difficulty: "hard", q: "Vad betyder 'Wednesday' på svenska?", options: ["Onsdag", "Tisdag", "Torsdag", "Fredag"], answer: 0 },
+  { subject: "engelska", difficulty: "hard", q: "Hur säger man 'Jag är nio år gammal' på engelska?", options: ["I am nine years old", "I have nine years", "My name is nine", "I are nine years"], answer: 0 },
+
   { subject: "logik", difficulty: "easy", visual: true, q: "Vilken figur kommer härnäst i mönstret?", diagram: "🔴 🔵 🔴 🔵 🔴 ❓", options: ["🔵", "🔴", "🟢", "🟡"], answer: 0 },
   { subject: "logik", difficulty: "easy", visual: true, q: "Vilken figur hör INTE hemma här?", diagram: "🍎   🍌   🍇   🚗", options: ["🚗", "🍎", "🍌", "🍇"], answer: 0 },
+  { subject: "logik", difficulty: "easy", visual: true, q: "Räkna stjärnorna! Hur många är det totalt?", diagram: "⭐⭐⭐\n⭐⭐⭐⭐", options: ["7", "6", "8", "5"], answer: 0 },
   { subject: "logik", difficulty: "hard", visual: true, q: "Fyll i den saknade biten i rutnätet:", diagram: "🔺 🟡\n🟡 ❓", options: ["🔺", "🟡", "🟦", "🟢"], answer: 0 },
   { subject: "logik", difficulty: "hard", visual: true, q: "Spegelbild! Vilken rad är helt symmetrisk?", diagram: "Titta noga på ordningen:", options: ["🟦 🔴 🟦", "🟦 🔴 🟡", "🔴 🟦 🟦", "🟡 🟡 🔴"], answer: 0 }
 ];
 
-const FALLBACK_AK7 = [
+const QUESTIONS_AK7 = [
   { subject: "matematik", difficulty: "easy", q: "Beräkna värdet av uttrycket: 5 - 3 · (-4)", options: ["17", "-8", "-7", "8"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Lös ekvationen: 4(x - 2) = 20", options: ["x = 7", "x = 5,5", "x = 3", "x = 4,5"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Förenkla uttrycket: 3a + 5b - a + 2b", options: ["2a + 7b", "4a + 7b", "9ab", "2a + 3b"], answer: 0 },
+  { subject: "matematik", difficulty: "easy", q: "Vilket bråk är störst: 3/4, 7/10 eller 11/15?", options: ["3/4", "11/15", "7/10", "Alla är lika stora"], answer: 0 },
+  { subject: "matematik", difficulty: "easy", q: "Vad är medianen av talen: 12, 4, 19, 7, 15?", options: ["12", "11,4", "19", "7"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "Ett pris sänks med 20 % och höjs sedan med 20 %. Hur har priset förändrats totalt?", options: ["Minskat med 4 %", "Oförändrat (0 %)", "Ökat med 4 %", "Minskat med 2 %"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "Beräkna (2 · 10⁴) · (4 · 10³) i grundpotensform.", options: ["8 · 10⁷", "8 · 10¹²", "6 · 10⁷", "8 · 10¹"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "Skalan på en karta är 1 : 50 000. Hur långt i verkligheten motsvarar 4 cm?", options: ["2 km", "20 km", "200 m", "5 km"], answer: 0 },
+  { subject: "matematik", difficulty: "hard", q: "En cirkel har diametern 10 cm. Vilken är arean ungefär? (π ≈ 3,14)", options: ["78,5 cm²", "31,4 cm²", "314 cm²", "15,7 cm²"], answer: 0 },
+  { subject: "matematik", difficulty: "hard", q: "Lös ekvationen: 5x - 7 = 2x + 11", options: ["x = 6", "x = 4", "x = 18/7", "x = 2"], answer: 0 },
+
   { subject: "no", difficulty: "easy", q: "Vilken gas tar växter upp genom klyvöppningarna vid fotosyntesen?", options: ["Koldioxid (CO₂)", "Syrgas (O₂)", "Kvävgas (N₂)", "Vätgas (H₂)"], answer: 0 },
   { subject: "no", difficulty: "easy", q: "Vilken enhet mäts elektrisk strömstyrka i?", options: ["Ampere (A)", "Volt (V)", "Ohm (Ω)", "Watt (W)"], answer: 0 },
+  { subject: "no", difficulty: "easy", q: "Vad kallas de blodkärl som leder blodet BORT från hjärtat?", options: ["Artärer", "Vener", "Kapillärer", "Lymfkärl"], answer: 0 },
   { subject: "no", difficulty: "hard", q: "En atom har atomnummer 11 och masstal 23. Hur många neutroner har den?", options: ["12", "11", "23", "34"], answer: 0 },
   { subject: "no", difficulty: "hard", q: "Varför flyter is på flytande vatten?", options: ["Is har lägre densitet än vatten", "Is har högre ytspänning", "Vattenmolekylerna blir tyngre vid 0 °C", "Is innehåller bara syre"], answer: 0 },
+  { subject: "no", difficulty: "hard", q: "Vad bildas när en syra och en bas neutraliserar varandra?", options: ["Salt och vatten", "Vätgas och syrgas", "Koldioxid och alkohol", "En starkare syra"], answer: 0 },
+
   { subject: "so", difficulty: "easy", q: "Vilken fred år 1658 gjorde att Skåne, Halland och Blekinge blev svenska?", options: ["Freden i Roskilde", "Freden i Brömsebro", "Westfaliska freden", "Freden i Knäred"], answer: 0 },
   { subject: "so", difficulty: "easy", q: "Vilken procentgräns måste ett parti nå för att komma in i Sveriges riksdag?", options: ["4 %", "2 %", "5 %", "10 %"], answer: 0 },
+  { subject: "so", difficulty: "easy", q: "Vilka tre världsreligioner räknas som de abrahamitiska religionerna?", options: ["Judendom, kristendom och islam", "Hinduism, buddhism och sikhism", "Kristendom, hinduism och islam", "Judendom, buddhism och islam"], answer: 0 },
   { subject: "so", difficulty: "hard", q: "Vad innebar 'reduktionen' under Karl XI:s regeringstid på 1680-talet?", options: ["Adeln tvingades lämna tillbaka gods till kronan", "Sverige minskade sin armé med hälften", "Bönderna fick rösträtt i riksdagen", "Skatterna sänktes för alla stånd"], answer: 0 },
   { subject: "so", difficulty: "hard", q: "Vad heter de fem Moseböckerna som utgör den heliga läran inom judendomen?", options: ["Torah", "Talmud", "Tipitaka", "Veda"], answer: 0 },
+  { subject: "so", difficulty: "hard", q: "Vad menas med 'inflationsmål' i svensk ekonomisk politik (Riksbanken)?", options: ["Att priserna ska öka med cirka 2 % per år", "Att arbetslösheten ska vara 0 %", "Att kronan ska ha exakt samma värde som euron", "Att statsskulden ska fördubblas"], answer: 0 },
+
   { subject: "svenska", difficulty: "easy", q: "Vad kallas det när man i retorik vädjar till lyssnarens känslor?", options: ["Pathos", "Ethos", "Logos", "Kairos"], answer: 0 },
+  { subject: "svenska", difficulty: "easy", q: "Vilken satsdel är 'snabbt' i meningen: 'Musen sprang snabbt över golvet'?", options: ["Adverbial", "Predikat", "Objekt", "Subjekt"], answer: 0 },
   { subject: "svenska", difficulty: "hard", q: "Vilka är Sveriges fem nationella minoritetsspråk?", options: ["Finska, jiddisch, meänkieli, romani chib och samiska", "Finska, norska, danska, samiska och estniska", "Samiska, finska, arabiska, romani och tyska", "Meänkieli, älvdalska, jiddisch, samiska och finska"], answer: 0 },
+  { subject: "svenska", difficulty: "hard", q: "Vad innebär begreppet 'källkritiskt tendenskriterium'?", options: ["Att undersöka om källan är partisk eller har ett eget intresse", "Att kontrollera exakt när källan skapades", "Att se om källan är en förstahandskälla", "Att räkna hur många som delar texten"], answer: 0 },
+
   { subject: "engelska", difficulty: "easy", q: "Which word is correct? 'Neither of the boys ___ ready.'", options: ["was", "were", "are", "have"], answer: 0 },
+  { subject: "engelska", difficulty: "easy", q: "Choose the correct relative pronoun: 'The girl ___ bag was stolen called the police.'", options: ["whose", "who's", "which", "whom"], answer: 0 },
   { subject: "engelska", difficulty: "hard", q: "What does the idiom 'to bite the bullet' mean?", options: ["To face a difficult situation bravely", "To eat very quickly", "To make a terrible mistake", "To stop talking suddenly"], answer: 0 },
+  { subject: "engelska", difficulty: "hard", q: "Which sentence uses the passive voice correctly?", options: ["The novel was written by a Swedish author.", "A Swedish author was writing the novel.", "The novel wrote itself yesterday.", "She has written a new novel."], answer: 0 },
+
   { subject: "logik", difficulty: "easy", visual: true, q: "Vilken symbol fullbordar matrisen?", diagram: "🔺 ⬜ 🔵\n⬜ 🔵 🔺\n🔵 🔺 ❓", options: ["⬜", "🔺", "🔵", "🟡"], answer: 0 },
   { subject: "logik", difficulty: "easy", visual: true, q: "Vilken figur roterar 90° medurs i varje steg?", diagram: "⬆️  ➡️  ⬇️  ❓", options: ["⬅️", "⬆️", "↗️", "⬇️"], answer: 0 },
   { subject: "logik", difficulty: "hard", visual: true, q: "Vilken figur saknas i den logiska följden?", diagram: "🌕 🌗 🌑 🌓 ❓", options: ["🌕", "🌑", "🌗", "🌔"], answer: 0 },
@@ -985,12 +1015,10 @@ function normalizeFirebaseUrl(raw) {
 let gameState = 'HOME';
 let selectedGrade = '7';
 let selectedSubject = 'blandat';
-let customQuestions = JSON.parse(localStorage.getItem('fragost_custom_q') || '[]');
-let customTopicName = localStorage.getItem('fragost_custom_topic') || '';
-let geminiApiKey = localStorage.getItem('fragost_gemini_key') || '';
+let pdfQuestions = JSON.parse(localStorage.getItem('fragost_pdf_q') || '[]');
+let pdfTopicName = localStorage.getItem('fragost_pdf_topic') || '';
 let firebaseDbUrl = normalizeFirebaseUrl(localStorage.getItem('fragost_firebase_url') || '');
 let seenQuestionHistory = JSON.parse(localStorage.getItem('fragost_seen_q') || '[]');
-let detectedWorkingModel = localStorage.getItem('fragost_working_model') || '';
 
 let currentScore = 0;
 let timeRemaining = TOTAL_GAME_SECONDS;
@@ -1046,19 +1074,230 @@ function computeFocusIndex(mCaught, mSpawned, qCorrect, qWrong, eMisses, cHit) {
   return Math.max(0, Math.min(100, Math.round((mouseAcc * 50) + (quizAcc * 50) - (eMisses * 2.5) - (cHit * 8))));
 }
 
-function updateCustomSubjectButton() {
-  const btn = document.getElementById('customSubjectBtn');
-  if (customQuestions.length > 0 && customTopicName) {
-    const shortName = customTopicName.length > 11 ? customTopicName.slice(0, 11) + '…' : customTopicName;
-    btn.textContent = `✨ ${shortName}`;
+function updatePdfSubjectButton() {
+  const btn = document.getElementById('pdfSubjectBtn');
+  const statusEl = document.getElementById('pdfStatusText');
+  if (pdfQuestions.length > 0 && pdfTopicName) {
+    const shortName = pdfTopicName.length > 11 ? pdfTopicName.slice(0, 11) + '…' : pdfTopicName;
+    btn.textContent = `📄 ${shortName}`;
+    statusEl.textContent = `✅ Aktiv PDF: "${pdfTopicName}" (${pdfQuestions.length} frågor klara)`;
+    statusEl.style.color = "#4ade80";
+    statusEl.style.display = "block";
   } else {
-    btn.textContent = '✨ Eget';
+    btn.textContent = '📄 PDF-ämne';
+    statusEl.style.display = "none";
   }
 }
-updateCustomSubjectButton();
+updatePdfSubjectButton();
 
 /* ==========================================================================
-   4. HOME-SKÄRM & MOLNSYNK-KONTROLL
+   4. PDF-LÄSARE & AUTOMATISK FRÅGEGENERATOR (100% LOKALT + WIKIPEDIA-STÖD)
+   ========================================================================== */
+function generateQuestionsFromExtractedText(rawText, topicTitle) {
+  // Rensa Wikipedia-referenser [1], [redigera], extra mellanslag och sidfötter
+  const cleanedText = rawText
+    .replace(/\[\d+\]/g, '')
+    .replace(/\[redigera[^\]]*\]/gi, '')
+    .replace(/https?:\/\/\S+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  // Dela upp i meningsfulla meningar (45 till 175 tecken)
+  const rawSentences = cleanedText.split(/(?<=[.!?])\s+/);
+  const sentences = rawSentences
+    .map(s => s.trim())
+    .filter(s => s.length >= 45 && s.length <= 175 && !s.includes('Wikimedia') && !s.includes('Wikipedia'));
+
+  if (sentences.length < 4) {
+    throw new Error("PDF-filen innehöll för lite läsbar text. Prova en annan PDF.");
+  }
+
+  // Samla nyckelord (substantiv/egenamn/årtal) från hela texten att använda som distraktorer
+  const stopWords = new Set([
+    "och","att","det","som","för","med","till","den","har","inte","var","om","men","ett","eller",
+    "från","kan","vid","under","efter","också","blev","man","när","ut","över","inom","mellan",
+    "där","här","sina","deras","vilket","vilka","denna","detta","dessa","genom","utan","samt","alla"
+  ]);
+
+  const allKeywords = [];
+  const years = [];
+
+  sentences.forEach(s => {
+    const yearMatches = s.match(/\b(1\d{3}|20\d{2})\b/g);
+    if (yearMatches) {
+      yearMatches.forEach(y => { if (!years.includes(y)) years.push(y); });
+    }
+    const words = s.replace(/[.,!?;:()"«»]/g, '').split(/\s+/);
+    words.forEach((w, idx) => {
+      if (w.length >= 5 && !stopWords.has(w.toLowerCase()) && !/^\d+$/.test(w)) {
+        // Prioritera ord med stor bokstav inne i meningen (namn, platser, begrepp) eller långa ord
+        if (idx > 0 && /^[A-ZÅÄÖ]/.test(w)) {
+          if (!allKeywords.includes(w)) allKeywords.push(w);
+        } else if (w.length >= 7) {
+          const lower = w.toLowerCase();
+          if (!allKeywords.includes(lower)) allKeywords.push(lower);
+        }
+      }
+    });
+  });
+
+  const generated = [];
+  const usedSentences = new Set();
+
+  // Blanda meningarna så frågorna kommer från hela dokumentet
+  const shuffledSentences = shuffleArray([...sentences]);
+
+  for (const s of shuffledSentences) {
+    if (generated.length >= 34) break;
+    if (usedSentences.has(s)) continue;
+
+    // Typ 1: Årtalsfråga om meningen innehåller ett årtal (1000–2026)
+    const yearMatch = s.match(/\b(1\d{3}|20\d{2})\b/);
+    if (yearMatch) {
+      const correctYear = yearMatch[1];
+      const questionStem = s.replace(correctYear, "____");
+      const distractors = [];
+      // Hämta andra årtal från texten eller skapa rimliga närliggande årtal
+      years.filter(y => y !== correctYear).forEach(y => {
+        if (distractors.length < 3) distractors.push(y);
+      });
+      const offsets = [-12, 15, -25, 30, 8, -7];
+      let offIdx = 0;
+      while (distractors.length < 3 && offIdx < offsets.length) {
+        const fakeYear = String(parseInt(correctYear, 10) + offsets[offIdx++]);
+        if (!distractors.includes(fakeYear) && fakeYear !== correctYear) {
+          distractors.push(fakeYear);
+        }
+      }
+      if (distractors.length === 3) {
+        usedSentences.add(s);
+        generated.push({
+          subject: "pdf",
+          difficulty: generated.length % 2 === 0 ? "easy" : "hard",
+          q: `Vilket årtal saknas? "${questionStem}"`,
+          options: [correctYear, ...distractors],
+          answer: 0
+        });
+        continue;
+      }
+    }
+
+    // Typ 2: Begrepps- och faktafråga (lucktest på det viktigaste nyckelordet i meningen)
+    const words = s.split(/\s+/);
+    let bestTarget = null;
+    let bestIndex = -1;
+
+    for (let i = 1; i < words.length; i++) {
+      const cleanW = words[i].replace(/[.,!?;:()"«»]/g, '');
+      if (cleanW.length >= 5 && !stopWords.has(cleanW.toLowerCase()) && !/^\d+$/.test(cleanW)) {
+        // Egennamn/begrepp med stor bokstav är bäst
+        if (/^[A-ZÅÄÖ]/.test(cleanW)) {
+          bestTarget = cleanW;
+          bestIndex = i;
+          break;
+        }
+        if (!bestTarget || cleanW.length > bestTarget.length) {
+          bestTarget = cleanW;
+          bestIndex = i;
+        }
+      }
+    }
+
+    if (bestTarget && bestIndex !== -1) {
+      const isCapitalized = /^[A-ZÅÄÖ]/.test(bestTarget);
+      const poolDistractors = allKeywords.filter(k =>
+        k.toLowerCase() !== bestTarget.toLowerCase() &&
+        (/^[A-ZÅÄÖ]/.test(k) === isCapitalized)
+      );
+
+      if (poolDistractors.length >= 3) {
+        const picked = shuffleArray([...poolDistractors]).slice(0, 3);
+        const maskedWords = [...words];
+        maskedWords[bestIndex] = words[bestIndex].replace(bestTarget, "______");
+        usedSentences.add(s);
+
+        generated.push({
+          subject: "pdf",
+          difficulty: bestTarget.length >= 8 ? "hard" : "easy",
+          q: `Fyll i rätt ord ur texten (${topicTitle}): "${maskedWords.join(' ')}"`,
+          options: [bestTarget, ...picked],
+          answer: 0
+        });
+      }
+    }
+  }
+
+  if (generated.length < 4) {
+    throw new Error("Kunde inte skapa tillräckligt många frågor ur den här PDF-filen.");
+  }
+
+  return generated;
+}
+
+document.getElementById('uploadPdfBtn').addEventListener('click', () => {
+  document.getElementById('pdfFileInput').click();
+});
+
+document.getElementById('pdfFileInput').addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const statusEl = document.getElementById('pdfStatusText');
+  statusEl.textContent = `⏳ Läser "${file.name}" och skapar frågor...`;
+  statusEl.style.color = "var(--info)";
+  statusEl.style.display = "block";
+
+  try {
+    if (!window.pdfjsLib) {
+      throw new Error("PDF-läsaren laddades inte. Kontrollera internetanslutningen en gång.");
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let fullText = "";
+    const maxPages = Math.min(pdf.numPages, 15); // Läs upp till 15 sidor
+
+    for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      const pageStr = textContent.items.map(item => item.str).join(' ');
+      fullText += " " + pageStr;
+    }
+
+    const cleanTitle = file.name.replace(/\.pdf$/i, '').replace(/[_-]+/g, ' ').trim();
+    const extracted = generateQuestionsFromExtractedText(fullText, cleanTitle);
+
+    pdfQuestions = extracted;
+    pdfTopicName = cleanTitle;
+
+    localStorage.setItem('fragost_pdf_q', JSON.stringify(pdfQuestions));
+    localStorage.setItem('fragost_pdf_topic', pdfTopicName);
+
+    // Markera PDF-ämnet som valt direkt
+    document.querySelectorAll('#subjectGrid .btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('pdfSubjectBtn').classList.add('selected');
+    selectedSubject = 'pdf';
+
+    updatePdfSubjectButton();
+
+    // Synka även PDF-frågorna till Firebase så den andra iPhonen får dem automatiskt!
+    if (firebaseDbUrl) {
+      fetch(`${firebaseDbUrl}/fragost_pdf.json`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic: pdfTopicName, questions: pdfQuestions, updated: Date.now() })
+      }).catch(() => {});
+    }
+  } catch (err) {
+    statusEl.textContent = `❌ ${err.message}`;
+    statusEl.style.color = "var(--danger)";
+  } finally {
+    e.target.value = "";
+  }
+});
+
+/* ==========================================================================
+   5. HOME-SKÄRM & MOLNSYNK-KONTROLL
    ========================================================================== */
 function fillCheeseJar(playerPrefix, score) {
   const fillEl = document.getElementById(`${playerPrefix}JarFill`);
@@ -1115,6 +1354,19 @@ async function refreshHomeDashboard() {
         } else {
           homeSyncLabel.textContent = `⚠️ Fel ${res.status}`;
           homeSyncLabel.style.color = "#ef4444";
+        }
+
+        // Hämta även eventuellt delat PDF-ämne från molnet
+        const pdfRes = await fetch(`${firebaseDbUrl}/fragost_pdf.json`, { cache: "no-store" });
+        if (pdfRes.ok) {
+          const cloudPdf = await pdfRes.json();
+          if (cloudPdf && Array.isArray(cloudPdf.questions) && cloudPdf.questions.length > 0) {
+            pdfQuestions = cloudPdf.questions;
+            pdfTopicName = cloudPdf.topic || "Delad PDF";
+            localStorage.setItem('fragost_pdf_q', JSON.stringify(pdfQuestions));
+            localStorage.setItem('fragost_pdf_topic', pdfTopicName);
+            updatePdfSubjectButton();
+          }
         }
       } catch (_) {
         homeSyncLabel.textContent = "📴 Nätverksfel";
@@ -1213,6 +1465,7 @@ function openSubjectScreenForGrade(grade) {
   document.getElementById('chosenPlayerEmoji').textContent = p.emoji;
   document.getElementById('chosenPlayerTitle').textContent = `${p.name} (Årskurs ${p.grade})`;
   document.getElementById('ruleMouseEmoji').textContent = p.emoji;
+  updatePdfSubjectButton();
 
   document.getElementById('homeScreen').classList.add('hidden');
   document.getElementById('subjectScreen').classList.remove('hidden');
@@ -1232,10 +1485,9 @@ document.getElementById('backToHomeBtn').addEventListener('click', () => {
 refreshHomeDashboard();
 
 /* ==========================================================================
-   5. INSTÄLLNINGAR & LIVE-DIAGNOSTIK
+   6. INSTÄLLNINGAR MODAL (FIREBASE SYNK)
    ========================================================================== */
 document.getElementById('openSettingsBtn').addEventListener('click', () => {
-  document.getElementById('geminiApiKeyInput').value = geminiApiKey;
   document.getElementById('firebaseUrlInput').value = firebaseDbUrl;
   document.getElementById('diagResultBox').classList.add('hidden');
   document.getElementById('settingsModal').classList.remove('hidden');
@@ -1246,289 +1498,52 @@ document.getElementById('closeSettingsBtn').addEventListener('click', () => {
 });
 
 document.getElementById('saveSettingsBtn').addEventListener('click', () => {
-  geminiApiKey = document.getElementById('geminiApiKeyInput').value.trim();
   firebaseDbUrl = normalizeFirebaseUrl(document.getElementById('firebaseUrlInput').value);
-  detectedWorkingModel = '';
-  localStorage.removeItem('fragost_working_model');
-  localStorage.setItem('fragost_gemini_key', geminiApiKey);
   localStorage.setItem('fragost_firebase_url', firebaseDbUrl);
   document.getElementById('settingsModal').classList.add('hidden');
   refreshHomeDashboard();
 });
 
 document.getElementById('testConnectionsBtn').addEventListener('click', async () => {
-  const testKey = document.getElementById('geminiApiKeyInput').value.trim();
   const testUrl = normalizeFirebaseUrl(document.getElementById('firebaseUrlInput').value);
   const diagBox = document.getElementById('diagResultBox');
   diagBox.classList.remove('hidden');
-  diagBox.innerHTML = '⏳ Testar anslutningar...';
+  diagBox.innerHTML = '⏳ Testar anslutning...';
 
-  let aiStatus = '⚪ Gemini AI: Ingen nyckel inskriven';
-  let fbStatus = '⚪ Firebase Moln: Ingen URL inskriven';
-
-  if (testKey) {
-    try {
-      const listRes = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(testKey)}`
-      );
-      if (!listRes.ok) {
-        const errData = await listRes.json().catch(() => ({}));
-        throw new Error(errData.error?.message || `Ogiltig API-nyckel (HTTP ${listRes.status})`);
-      }
-      const listData = await listRes.json();
-      const firstFlash = (listData.models || []).find(m => {
-        const n = (m.name || '').toLowerCase();
-        return n.includes('flash') && !n.includes('image') && !n.includes('audio') && !n.includes('thinking') &&
-               (m.supportedGenerationMethods || []).includes('generateContent');
-      });
-      aiStatus = `✅ Gemini AI OK (${firstFlash ? firstFlash.name.replace('models/', '') : 'Ansluten'})`;
-    } catch (e) {
-      aiStatus = `❌ Gemini AI fel: ${e.message}`;
-    }
-  }
-
-  if (testUrl) {
-    if (testUrl.includes('console.firebase.google.com')) {
-      fbStatus = '❌ Firebase fel: Du klistrade in konsol-länken. Kopiera länken som slutar på .firebasedatabase.app';
-    } else {
-      try {
-        const res = await fetch(`${testUrl}/fragost_ping.json`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ok: true, ts: Date.now() })
-        });
-        if (res.ok) {
-          fbStatus = '✅ Firebase Moln OK (Läs & skriv fungerar!)';
-        } else if (res.status === 401 || res.status === 403) {
-          fbStatus = '❌ Firebase låst (401/403): Ändra Rules till ".read": true, ".write": true och tryck Publish.';
-        } else {
-          fbStatus = `❌ Firebase fel (HTTP ${res.status}): Kontrollera URL:en.`;
-        }
-      } catch (e) {
-        fbStatus = `❌ Firebase nätverksfel: ${e.message}`;
-      }
-    }
-  }
-
-  diagBox.innerHTML = `${aiStatus}<br>${fbStatus}`;
-});
-
-/* ==========================================================================
-   6. GEMINI AI-MOTOR (UTAN STRICT JSON-MODE FÖR MAXIMAL KOMPATIBILITET)
-   ========================================================================== */
-async function callGeminiForQuestions(promptText, statusCallback = null) {
-  if (!geminiApiKey) throw new Error("Ingen Gemini API-nyckel sparad (klicka på ⚙️ på startsidan).");
-
-  let candidateModels = [];
-  try {
-    const listRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(geminiApiKey)}`
-    );
-    if (listRes.ok) {
-      const listData = await listRes.json();
-      const allFlash = (listData.models || [])
-        .filter(m => {
-          const n = (m.name || '').toLowerCase();
-          return n.includes('flash') && !n.includes('image') && !n.includes('audio') && !n.includes('thinking') &&
-                 (m.supportedGenerationMethods || []).includes('generateContent');
-        })
-        .map(m => m.name);
-      const priority = ['3.8-flash', '3.5-flash', '3-flash', '2.5-flash', '2.0-flash'];
-      for (const tag of priority) {
-        allFlash.filter(n => n.includes(tag)).forEach(n => {
-          if (!candidateModels.includes(n)) candidateModels.push(n);
-        });
-      }
-      allFlash.forEach(n => { if (!candidateModels.includes(n)) candidateModels.push(n); });
-    }
-  } catch (_) {}
-
-  if (candidateModels.length === 0) {
-    candidateModels = ["models/gemini-3.8-flash", "models/gemini-2.5-flash"];
-  }
-
-  let lastError = "Kunde inte nå AI-servern.";
-
-  for (let i = 0; i < Math.min(candidateModels.length, 3); i++) {
-    const modelName = candidateModels[i];
-    if (statusCallback && i > 0) {
-      statusCallback(`Provar alternativ modell ${modelName.replace('models/', '')}...`);
-    }
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 25000);
-
-    try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/${modelName}:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          signal: controller.signal,
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: promptText }] }],
-            generationConfig: {
-              temperature: 0.7
-            }
-          })
-        }
-      );
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        lastError = errData.error?.message || `HTTP ${response.status}`;
-        continue;
-      }
-
-      const data = await response.json();
-      const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      const startIdx = rawText.indexOf('[');
-      const endIdx = rawText.lastIndexOf(']');
-      if (startIdx === -1 || endIdx === -1) {
-        lastError = "Modellen returnerade ingen frågelista.";
-        continue;
-      }
-      const parsed = JSON.parse(rawText.slice(startIdx, endIdx + 1));
-      if (Array.isArray(parsed) && parsed.length >= 4) {
-        detectedWorkingModel = modelName;
-        localStorage.setItem('fragost_working_model', modelName);
-        return parsed;
-      }
-    } catch (err) {
-      clearTimeout(timeoutId);
-      lastError = err.name === 'AbortError' ? 'Tidsgräns (25s) – provar nästa modell...' : err.message;
-    }
-  }
-
-  throw new Error(lastError);
-}
-
-async function prefetchAiCurriculumQuestions() {
-  if (!geminiApiKey || selectedSubject === 'custom' || selectedSubject === 'logik') return;
-
-  const p = getPlayerInfo();
-  const subjectMap = {
-    blandat: "en blandning av Matematik, NO (biologi, fysik, kemi), SO (historia, geografi, samhällskunskap, religion), Svenska och Engelska",
-    matematik: "Matematik (taluppfattning, algebra, geometri, procent, sannolikhet)",
-    no: "NO (biologi, fysik och kemi)",
-    so: "SO (historia, geografi, samhällskunskap och religionskunskap)",
-    svenska: "Svenska (grammatik, ordklasser, satsdelar, retorik, källkritik, språkhistoria)",
-    engelska: "Engelska (engelsk grammatik, ordförråd, idiom och läsförståelse)"
-  };
-
-  const levelDesc = p.grade === '3'
-    ? "årskurs 3 enligt svenska läroplanen Lgr22 (9–10 år)"
-    : "årskurs 7 enligt svenska läroplanen Lgr22 (13–14 år), utmanande nivå";
-
-  const recentAvoid = seenQuestionHistory.slice(-15).join(" | ");
-
-  const prompt = `Skapa 8 helt nya, utmanande flervalsfrågor inom ${subjectMap[selectedSubject]} för ${levelDesc}.
-4 frågor med "difficulty": "easy" och 4 frågor med "difficulty": "hard".
-Undvik att upprepa: [${recentAvoid}].
-Det RÄTTA svaret ska alltid ligga på index 0 i "options" (exakt 4 alternativ).
-Svara ENDAST med en giltig JSON-array utan markdown eller extra text:
-[{"subject":"${selectedSubject === 'blandat' ? 'matematik' : selectedSubject}","difficulty":"easy","q":"Fråga?","options":["Rätt","Fel1","Fel2","Fel3"],"answer":0}]`;
-
-  try {
-    const fresh = await callGeminiForQuestions(prompt);
-    const formatted = fresh.map(item => ({
-      subject: item.subject || selectedSubject,
-      difficulty: item.difficulty === "hard" ? "hard" : "easy",
-      q: item.q,
-      options: item.options,
-      answer: typeof item.answer === 'number' ? item.answer : 0
-    }));
-    questionDeck = [...questionDeck, ...shuffleArray(formatted)];
-  } catch (_) {}
-}
-
-/* ==========================================================================
-   7. EGET ÄMNE MODAL (✨ EGET)
-   ========================================================================== */
-function openCustomModal() {
-  if (!geminiApiKey) {
-    document.getElementById('settingsModal').classList.remove('hidden');
+  if (!testUrl) {
+    diagBox.innerHTML = '⚪ Klistra in din Firebase-länk ovan först.';
     return;
   }
-  const p = getPlayerInfo();
-  document.getElementById('modalPlayerName').textContent = `${p.name} (Åk ${p.grade})`;
-  document.getElementById('customTopicInput').value = customTopicName;
-  document.getElementById('aiStatusMsg').style.display = 'none';
-  document.getElementById('customModal').classList.remove('hidden');
-}
-
-document.getElementById('closeCustomModalBtn').addEventListener('click', () => {
-  document.getElementById('customModal').classList.add('hidden');
-});
-
-document.getElementById('generateAiBtn').addEventListener('click', async () => {
-  const topic = document.getElementById('customTopicInput').value.trim();
-  const statusEl = document.getElementById('aiStatusMsg');
-  const genBtn = document.getElementById('generateAiBtn');
-
-  if (!topic) {
-    statusEl.textContent = "Skriv ett ämne först (t.ex. Vikingatiden eller Astronomi).";
-    statusEl.style.color = "var(--danger)";
-    statusEl.style.display = "block";
+  if (testUrl.includes('console.firebase.google.com')) {
+    diagBox.innerHTML = '❌ Fel länk: Kopiera länken som slutar på <b>.firebasedatabase.app</b>';
     return;
   }
 
-  const p = getPlayerInfo();
-  const levelDesc = p.grade === '3'
-    ? "årskurs 3 i svensk grundskola (9–10 år)"
-    : "årskurs 7 i svensk grundskola (13–14 år), hög svårighetsgrad och kluriga alternativ";
-
-  const prompt = `Skapa 8 unika, djupa och varierande flervalsfrågor på svenska om "${topic}" anpassade för ${levelDesc}.
-4 frågor med "difficulty": "easy" och 4 frågor med "difficulty": "hard".
-Det RÄTTA svaret ska alltid ligga på index 0 i "options" (exakt 4 alternativ).
-Svara ENDAST med en giltig JSON-array utan markdown eller extra text:
-[{"subject":"custom","difficulty":"easy","q":"Fråga?","options":["Rätt","Fel1","Fel2","Fel3"],"answer":0}]`;
-
-  genBtn.disabled = true;
-  genBtn.textContent = "Skapar frågor... ⏳";
-  statusEl.textContent = `AI skapar 8 frågor om "${topic}"...`;
-  statusEl.style.color = "var(--info)";
-  statusEl.style.display = "block";
-
   try {
-    const parsed = await callGeminiForQuestions(prompt, (msg) => {
-      statusEl.textContent = msg;
+    const res = await fetch(`${testUrl}/fragost_ping.json`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ok: true, ts: Date.now() })
     });
-    customQuestions = parsed.map(item => ({
-      subject: "custom",
-      difficulty: item.difficulty === "hard" ? "hard" : "easy",
-      q: item.q,
-      options: item.options,
-      answer: typeof item.answer === 'number' ? item.answer : 0
-    }));
-    customTopicName = topic;
-
-    localStorage.setItem('fragost_custom_q', JSON.stringify(customQuestions));
-    localStorage.setItem('fragost_custom_topic', customTopicName);
-
-    updateCustomSubjectButton();
-    document.querySelectorAll('#subjectGrid .btn').forEach(b => b.classList.remove('selected'));
-    document.getElementById('customSubjectBtn').classList.add('selected');
-    selectedSubject = 'custom';
-
-    document.getElementById('customModal').classList.add('hidden');
-  } catch (err) {
-    statusEl.textContent = `Fel: ${err.message}`;
-    statusEl.style.color = "var(--danger)";
-  } finally {
-    genBtn.disabled = false;
-    genBtn.textContent = "Skapa frågor ✨";
+    if (res.ok) {
+      diagBox.innerHTML = '✅ Firebase Moln OK (Läs & skriv fungerar mellan telefonerna!)';
+    } else if (res.status === 401 || res.status === 403) {
+      diagBox.innerHTML = '❌ Firebase låst (401/403): Ändra Regole till ".read": true, ".write": true och tryck Pubblica.';
+    } else {
+      diagBox.innerHTML = `❌ Firebase fel (HTTP ${res.status}): Kontrollera URL:en.`;
+    }
+  } catch (e) {
+    diagBox.innerHTML = `❌ Nätverksfel: ${e.message}`;
   }
 });
 
 /* ==========================================================================
-   8. SPELKONTROLLER & KORTLEKSHANTERING
+   7. SPELKONTROLLER & KORTLEKSHANTERING (MED ANTI-UPPREPNING)
    ========================================================================== */
 document.querySelectorAll('#subjectGrid .btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    if (btn.dataset.subject === 'custom') {
-      openCustomModal();
+    if (btn.dataset.subject === 'pdf' && pdfQuestions.length === 0) {
+      document.getElementById('pdfFileInput').click();
       return;
     }
     document.querySelectorAll('#subjectGrid .btn').forEach(b => b.classList.remove('selected'));
@@ -1538,8 +1553,8 @@ document.querySelectorAll('#subjectGrid .btn').forEach(btn => {
 });
 
 document.getElementById('startBtn').addEventListener('click', () => {
-  if (selectedSubject === 'custom' && customQuestions.length === 0) {
-    openCustomModal();
+  if (selectedSubject === 'pdf' && pdfQuestions.length === 0) {
+    document.getElementById('pdfFileInput').click();
     return;
   }
   sfx.init();
@@ -1573,22 +1588,28 @@ function shuffleArray(arr) {
 }
 
 function buildQuestionDecks() {
-  const baseBank = selectedGrade === '3' ? FALLBACK_AK3 : FALLBACK_AK7;
+  const baseBank = selectedGrade === '3' ? QUESTIONS_AK3 : QUESTIONS_AK7;
   visualDeck = shuffleArray(baseBank.filter(q => q.subject === 'logik'));
 
-  let pool = selectedSubject === 'custom' ? [...customQuestions] : [...baseBank];
-  if (selectedSubject !== 'blandat' && selectedSubject !== 'custom') {
-    pool = pool.filter(q => q.subject === selectedSubject);
+  let pool;
+  if (selectedSubject === 'pdf') {
+    pool = [...pdfQuestions];
+  } else if (selectedSubject === 'blandat') {
+    // I Blandat ingår både skolämnena och eventuella uppladdade PDF-frågor!
+    pool = [...baseBank, ...pdfQuestions];
+  } else {
+    pool = baseBank.filter(q => q.subject === selectedSubject);
   }
+
   const unseen = pool.filter(q => !seenQuestionHistory.includes(q.q));
   const seen = pool.filter(q => seenQuestionHistory.includes(q.q));
   questionDeck = [...shuffleArray(seen), ...shuffleArray(unseen)];
 }
 
 function drawNextQuestion(difficulty, forceVisualTimed) {
-  const baseBank = selectedGrade === '3' ? FALLBACK_AK3 : FALLBACK_AK7;
+  const baseBank = selectedGrade === '3' ? QUESTIONS_AK3 : QUESTIONS_AK7;
 
-  if (forceVisualTimed && selectedSubject !== 'custom') {
+  if (forceVisualTimed && selectedSubject !== 'pdf') {
     if (visualDeck.length === 0) {
       visualDeck = shuffleArray(baseBank.filter(q => q.subject === 'logik'));
     }
@@ -1631,7 +1652,6 @@ function startGame() {
   clearInterval(quizInterval);
   clearAllHoles();
   buildQuestionDecks();
-  prefetchAiCurriculumQuestions();
 
   currentScore = 0;
   timeRemaining = TOTAL_GAME_SECONDS;
@@ -1821,7 +1841,7 @@ function handleHoleTap(index) {
 }
 
 /* ==========================================================================
-   9. QUIZ-SYSTEM
+   8. QUIZ-SYSTEM
    ========================================================================== */
 function openQuiz(isHard) {
   gameState = 'QUIZ';
@@ -1843,7 +1863,7 @@ function openQuiz(isHard) {
     svenska: `📚 Svenska (Åk ${selectedGrade})`,
     engelska: `🇬🇧 Engelska (Åk ${selectedGrade})`,
     logik: `🧠 Visuell Logik & Mönster`,
-    custom: `✨ ${customTopicName || 'Eget ämne'}`
+    pdf: `📄 PDF: ${pdfTopicName || 'Uppladdat dokument'}`
   };
   document.getElementById('subjectLabel').textContent = subjectNames[qObj.subject] || "Skolfråga";
   document.getElementById('questionText').textContent = qObj.q;
@@ -1965,7 +1985,7 @@ function openQuiz(isHard) {
 }
 
 /* ==========================================================================
-   10. VECKANS POTT & FIREBASE MOLNSYNK
+   9. VECKANS POTT & FIREBASE MOLNSYNK
    ========================================================================== */
 async function syncWeeklyBattle(playerId, roundScore, roundCorrectQ, roundFocusIdx) {
   const weekInfo = getISOWeekInfo();
