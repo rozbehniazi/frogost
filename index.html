@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Frågost" />
   <link id="appleTouchIcon" rel="apple-touch-icon" href="" />
   <link id="faviconIcon" rel="icon" href="" />
-  <title>Frågost9</title>
+  <title>Frågost</title>
   <script>
     (function generateCheeseAppIcon() {
       const canvas = document.createElement('canvas');
@@ -247,19 +247,6 @@
       position: relative;
     }
 
-    .top-gear-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: #0f172a;
-      border: 1px solid #334155;
-      color: #cbd5e1;
-      border-radius: 12px;
-      padding: 7px 10px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
     .top-back-btn {
       position: absolute;
       top: 16px;
@@ -276,10 +263,14 @@
 
     h1.main-title {
       margin: 0 0 4px 0;
-      font-size: 38px;
+      font-size: 36px;
       font-weight: 900;
       letter-spacing: -0.5px;
       color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     p.main-subtitle {
@@ -401,6 +392,33 @@
       border-radius: 999px;
       width: 100%;
     }
+
+    .home-footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 4px;
+    }
+
+    .version-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      text-align: left;
+    }
+
+    .bottom-gear-btn {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      border-radius: 10px;
+      padding: 5px 9px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .bottom-gear-btn:active { transform: scale(0.94); }
 
     .rules-box {
       background: rgba(15, 23, 42, 0.65);
@@ -572,7 +590,7 @@
       background: #0f172a;
       border-radius: 14px;
       padding: 9px;
-      margin: 8px 0 8px 0;
+      margin: 8px 0 0 0;
       border: 1px solid rgba(250, 204, 21, 0.25);
       text-align: left;
     }
@@ -636,8 +654,7 @@
   <!-- SKÄRM 1: HOME -->
   <div id="homeScreen" class="overlay">
     <div class="card">
-      <button id="openSettingsBtn" class="top-gear-btn" title="Inställningar">⚙️</button>
-      <h1 class="main-title">Frågost</h1>
+      <h1 class="main-title"><span>🧀</span> Frågost</h1>
       <p class="main-subtitle">Vem spelar nu? Fem minuters utmaning.</p>
 
       <div style="font-size:11.5px; font-weight:800; color:var(--info); margin-bottom:6px;">
@@ -678,7 +695,7 @@
         </div>
       </div>
 
-      <div class="leaderboard-box" style="margin-bottom:0;">
+      <div class="leaderboard-box">
         <div class="leaderboard-title">
           <span>📅 VECKOVINNARE & SENASTE OMGÅNGAR</span>
           <span id="homeSyncLabel" style="font-size:10px; color:#94a3b8;">Kontrollerar...</span>
@@ -686,6 +703,11 @@
         <div id="homeHistoryList">
           <div style="font-size:11.5px; color:#64748b;">Inga spelade omgångar ännu.</div>
         </div>
+      </div>
+
+      <div class="home-footer-bar">
+        <span class="version-label">Version 1</span>
+        <button id="openSettingsBtn" class="bottom-gear-btn" title="Inställningar">⚙️</button>
       </div>
     </div>
   </div>
@@ -795,7 +817,7 @@
       <div style="background:#0f172a; padding:10px; border-radius:14px; border:1px solid rgba(250,204,21,0.35);">
         <div style="font-size:11.5px; color:#94a3b8;">Omgångens poäng för <b id="endPlayerName" style="color:white;">Aura</b></div>
         <div style="font-size:30px; font-weight:900; color:var(--accent);" id="finalTotalScore">0 p</div>
-        <div style="font-size:11.5px; color:#38bdf8; font-weight:700;" id="roundFocusBadge">Fokus & Reflex-index: 0%</div>
+        <div style="font-size:11.5px; color:#38bdf8; font-weight:700;" id="roundFocusBadge">Fokus & Reflex-index denna runda: 0%</div>
       </div>
 
       <div class="stats-grid">
@@ -1210,7 +1232,7 @@ document.getElementById('backToHomeBtn').addEventListener('click', () => {
 refreshHomeDashboard();
 
 /* ==========================================================================
-   5. INSTÄLLNINGAR & LIVE-DIAGNOSTIK (TESTA AI & FIREBASE DIREKT)
+   5. INSTÄLLNINGAR & LIVE-DIAGNOSTIK
    ========================================================================== */
 document.getElementById('openSettingsBtn').addEventListener('click', () => {
   document.getElementById('geminiApiKeyInput').value = geminiApiKey;
@@ -1254,9 +1276,11 @@ document.getElementById('testConnectionsBtn').addEventListener('click', async ()
         throw new Error(errData.error?.message || `Ogiltig API-nyckel (HTTP ${listRes.status})`);
       }
       const listData = await listRes.json();
-      const firstFlash = (listData.models || []).find(
-        m => m.name && m.name.toLowerCase().includes('flash') && (m.supportedGenerationMethods || []).includes('generateContent')
-      );
+      const firstFlash = (listData.models || []).find(m => {
+        const n = (m.name || '').toLowerCase();
+        return n.includes('flash') && !n.includes('image') && !n.includes('audio') && !n.includes('thinking') &&
+               (m.supportedGenerationMethods || []).includes('generateContent');
+      });
       aiStatus = `✅ Gemini AI OK (${firstFlash ? firstFlash.name.replace('models/', '') : 'Ansluten'})`;
     } catch (e) {
       aiStatus = `❌ Gemini AI fel: ${e.message}`;
@@ -1290,7 +1314,7 @@ document.getElementById('testConnectionsBtn').addEventListener('click', async ()
 });
 
 /* ==========================================================================
-   6. RESILIENT GEMINI AI-MOTOR (AUTOMATISK RESERVVÄXLING VID HÖG BELASTNING)
+   6. RESILIENT GEMINI AI-MOTOR (STRICT JSON + AUTOMATISK RESERVVÄXLING)
    ========================================================================== */
 async function callGeminiForQuestions(promptText, statusCallback = null) {
   if (!geminiApiKey) throw new Error("Ingen Gemini API-nyckel sparad (klicka på ⚙️ på startsidan).");
@@ -1303,7 +1327,11 @@ async function callGeminiForQuestions(promptText, statusCallback = null) {
     if (listRes.ok) {
       const listData = await listRes.json();
       const allFlash = (listData.models || [])
-        .filter(m => m.name && m.name.toLowerCase().includes('flash') && (m.supportedGenerationMethods || []).includes('generateContent'))
+        .filter(m => {
+          const n = (m.name || '').toLowerCase();
+          return n.includes('flash') && !n.includes('image') && !n.includes('audio') && !n.includes('thinking') &&
+                 (m.supportedGenerationMethods || []).includes('generateContent');
+        })
         .map(m => m.name);
       const priority = ['3.8-flash', '3.5-flash', '3-flash', '2.5-flash', '2.0-flash'];
       for (const tag of priority) {
@@ -1324,7 +1352,7 @@ async function callGeminiForQuestions(promptText, statusCallback = null) {
   for (let i = 0; i < Math.min(candidateModels.length, 3); i++) {
     const modelName = candidateModels[i];
     if (statusCallback && i > 0) {
-      statusCallback(`Hög belastning – byter automatiskt till ${modelName.replace('models/', '')}...`);
+      statusCallback(`Provar alternativ modell ${modelName.replace('models/', '')}...`);
     }
 
     const controller = new AbortController();
@@ -1339,7 +1367,10 @@ async function callGeminiForQuestions(promptText, statusCallback = null) {
           signal: controller.signal,
           body: JSON.stringify({
             contents: [{ parts: [{ text: promptText }] }],
-            generationConfig: { temperature: 0.8 }
+            generationConfig: {
+              temperature: 0.7,
+              responseMimeType: "application/json"
+            }
           })
         }
       );
@@ -1356,7 +1387,7 @@ async function callGeminiForQuestions(promptText, statusCallback = null) {
       const startIdx = rawText.indexOf('[');
       const endIdx = rawText.lastIndexOf(']');
       if (startIdx === -1 || endIdx === -1) {
-        lastError = "Ogiltigt JSON-svar från modellen.";
+        lastError = "Modellen returnerade ingen frågelista.";
         continue;
       }
       const parsed = JSON.parse(rawText.slice(startIdx, endIdx + 1));
@@ -1367,7 +1398,7 @@ async function callGeminiForQuestions(promptText, statusCallback = null) {
       }
     } catch (err) {
       clearTimeout(timeoutId);
-      lastError = err.name === 'AbortError' ? 'Tidsgräns (25s) – provar snabbare modell...' : err.message;
+      lastError = err.name === 'AbortError' ? 'Tidsgräns (25s) – provar nästa modell...' : err.message;
     }
   }
 
