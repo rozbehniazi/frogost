@@ -10,7 +10,7 @@
   <link id="faviconIcon" rel="icon" href="" />
   <title>Frågost</title>
   <script>
-    // Generazione automatica icona App iPhone: sfondo nero + grande formaggio al centro
+    // Icona App iPhone: sfondo nero puro + grande formaggio al centro
     (function generateCheeseAppIcon() {
       const canvas = document.createElement('canvas');
       canvas.width = 512;
@@ -121,7 +121,6 @@
       color: #fca5a5;
     }
 
-    /* 5-Minuters Progress Bar */
     .game-timer-wrap {
       width: 100%;
       height: 12px;
@@ -139,7 +138,7 @@
       transition: width 0.2s linear;
     }
 
-    /* 3x4 Grid for iPhone */
+    /* 3x4 Grid */
     #grid {
       flex: 1;
       display: grid;
@@ -243,7 +242,7 @@
     .card {
       background: var(--bg-panel);
       border-radius: 22px;
-      padding: 20px;
+      padding: 18px;
       width: 100%;
       max-width: 460px;
       max-height: 95vh;
@@ -251,6 +250,20 @@
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
       border: 1px solid rgba(255,255,255,0.1);
       text-align: center;
+      position: relative;
+    }
+
+    .top-gear-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      border-radius: 12px;
+      padding: 7px 10px;
+      font-size: 15px;
+      cursor: pointer;
     }
 
     h1.main-title {
@@ -263,25 +276,24 @@
     }
 
     p.main-subtitle {
-      margin: 0 0 14px 0;
+      margin: 0 0 12px 0;
       font-size: 13.5px;
       font-weight: 600;
       color: #cbd5e1;
     }
 
-    /* Player Selector Cards (Roc vs Aura) */
     .grade-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin: 8px 0 12px 0;
+      margin: 6px 0 12px 0;
     }
 
     .grade-btn {
       background: #0f172a;
       border: 2px solid #334155;
       border-radius: 18px;
-      padding: 12px 8px;
+      padding: 11px 8px;
       color: white;
       cursor: pointer;
       display: flex;
@@ -332,11 +344,7 @@
     }
 
     .btn:active { transform: scale(0.97); }
-
-    .btn.selected {
-      background: var(--accent);
-      color: #0f172a;
-    }
+    .btn.selected { background: var(--accent); color: #0f172a; }
 
     .btn-primary {
       background: var(--accent);
@@ -349,29 +357,23 @@
       margin-top: 4px;
     }
 
-    .btn-primary:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    input[type="text"], input[type="password"] {
+    input[type="text"], input[type="password"], input[type="url"] {
       width: 100%;
       background: #0f172a;
       border: 2px solid #334155;
       color: white;
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-size: 15px;
+      padding: 11px 13px;
+      border-radius: 13px;
+      font-size: 14px;
       font-weight: 600;
       user-select: text;
       -webkit-user-select: text;
-      margin-top: 6px;
+      margin-top: 5px;
     }
 
-    input[type="text"]:focus, input[type="password"]:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
+    input:focus { outline: none; border-color: var(--accent); }
 
     /* Quiz Modal */
     .quiz-timer-bar-wrap {
@@ -429,17 +431,8 @@
       margin-top: 12px;
     }
 
-    .options-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .options-list.visual-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
+    .options-list { display: flex; flex-direction: column; gap: 8px; }
+    .options-list.visual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
     .option-btn {
       background: #0f172a;
@@ -462,7 +455,7 @@
     .option-btn.correct { background: var(--success); border-color: var(--success); color: #052e16; }
     .option-btn.wrong { background: var(--danger); border-color: var(--danger); color: white; }
 
-    /* Stats & Roc vs Aura Battle Panel */
+    /* Stats & Weekly Pott Panel */
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -485,16 +478,16 @@
       background: linear-gradient(145deg, #0f172a, #172033);
       border-radius: 16px;
       padding: 11px;
-      margin: 10px 0;
+      margin: 9px 0;
       border: 1px solid rgba(56, 189, 248, 0.35);
       text-align: left;
     }
 
     .battle-header {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 900;
       color: var(--info);
-      margin-bottom: 8px;
+      margin-bottom: 7px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -515,10 +508,10 @@
 
     .fighter-card.leader {
       border-color: var(--accent);
-      background: rgba(250, 204, 21, 0.1);
+      background: rgba(250, 204, 21, 0.12);
     }
 
-    .fighter-name { font-size: 14px; font-weight: 900; margin-bottom: 4px; }
+    .fighter-name { font-size: 14px; font-weight: 900; margin-bottom: 3px; }
     .fighter-metric { font-size: 11.5px; color: #cbd5e1; line-height: 1.45; }
 
     .leaderboard-box {
@@ -554,6 +547,17 @@
       border: 1px solid var(--accent);
       background: rgba(250, 204, 21, 0.14);
     }
+
+    .sync-pill {
+      display: inline-block;
+      font-size: 10.5px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.15);
+      color: #86efac;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      margin-bottom: 6px;
+    }
   </style>
 </head>
 <body>
@@ -583,8 +587,11 @@
   <!-- Start Screen -->
   <div id="startScreen" class="overlay">
     <div class="card">
+      <button id="openSettingsBtn" class="top-gear-btn" title="AI & Synk-inställningar">⚙️</button>
       <h1 class="main-title">Frågost</h1>
       <p class="main-subtitle">Vem spelar nu? Fem minuters utmaning.</p>
+
+      <div id="cloudStatusBadge" class="sync-pill hidden">☁️ Molnsynk aktiv</div>
 
       <div class="grade-grid">
         <button class="grade-btn" data-grade="3" id="grade3Btn">
@@ -601,11 +608,11 @@
 
       <div class="rules-box">
         <div><span id="ruleMouseEmoji">🐹</span> <b>Musen:</b> +10p. 😼 <b>Katten:</b> Nollställer poäng (0p).</div>
-        <div>♾️ <b>Matte & skolfrågor:</b> Ingen timer! (Var 5:e fråga = snabb visuell kluring).</div>
+        <div>♾️ <b>Matte & skolfrågor:</b> Ingen timer! (Var 5:e fråga = visuell kluring).</div>
         <div>💀 <b>Dödskallen (~2%):</b> Rör du den avslutas omgången.</div>
       </div>
 
-      <p style="font-size:12px; font-weight:700; margin:0 0 6px 0; text-align:left;">Välj ämne:</p>
+      <p style="font-size:12px; font-weight:700; margin:0 0 6px 0; text-align:left;">Välj ämne (Lgr22):</p>
       <div class="subject-grid" id="subjectGrid">
         <button class="btn selected" data-subject="blandat">🎲 Blandat</button>
         <button class="btn" data-subject="matematik">📐 Matematik</button>
@@ -639,29 +646,16 @@
     </div>
   </div>
 
-  <!-- AI Custom Topic Modal (Öppnas direkt när man trycker på ✨ Eget) -->
+  <!-- Custom Topic Modal (✨ Eget) -->
   <div id="customModal" class="overlay hidden">
     <div class="card" style="text-align:left;">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h2 style="margin:0; color:var(--accent); font-size:20px;">✨ Eget ämne med AI</h2>
-        <button id="toggleApiKeyBtn" class="hud-btn" style="font-size:12px;">⚙️ API-nyckel</button>
-      </div>
-
-      <p style="font-size:13px; color:#cbd5e1; margin:8px 0 10px 0; line-height:1.4;">
-        Skriv ett valfritt ämne (t.ex. <b>Vikingatiden</b>, <b>Rymden</b>, <b>Bråk</b> eller <b>Franska revolutionen</b>). AI skapar utmanande frågor anpassade för <b id="modalPlayerName">Aura</b>!
+      <h2 style="margin:0 0 6px 0; color:var(--accent); font-size:20px;">✨ Eget ämne med AI</h2>
+      <p style="font-size:13px; color:#cbd5e1; margin:0 0 10px 0; line-height:1.4;">
+        Skriv ett valfritt ämne (t.ex. <b>Vikingatiden</b>, <b>Rymden</b>, <b>Bråk</b>). AI skapar nya frågor för <b id="modalPlayerName">Aura</b>!
       </p>
 
       <label style="font-size:12px; font-weight:700; color:#94a3b8;">Ämne eller tema:</label>
       <input type="text" id="customTopicInput" placeholder="T.ex. Vikingatiden..." />
-
-      <!-- API Key inställning (visas automatiskt om nyckel saknas eller vid klick på ⚙️) -->
-      <div id="apiKeySection" class="hidden" style="margin-top:12px; padding:10px; background:#0f172a; border-radius:12px; border:1px solid #334155;">
-        <label style="font-size:11.5px; font-weight:700; color:var(--info);">Google Gemini API-nyckel (sparas lokalt i iPhone):</label>
-        <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..." />
-        <p style="font-size:11px; color:#94a3b8; margin:6px 0 0 0;">
-          Hämta en gratis nyckel på <b>aistudio.google.com</b>. Den lämnar aldrig din enhet utom vid anrop till Google.
-        </p>
-      </div>
 
       <p id="aiStatusMsg" style="font-size:12.5px; color:var(--danger); display:none; margin:10px 0 0 0; font-weight:600;"></p>
 
@@ -672,17 +666,45 @@
     </div>
   </div>
 
-  <!-- Game Over, Statistik & Roc vs Aura Tävling -->
+  <!-- Settings Modal (⚙️ API-nyckel & Firebase Molnsynk) -->
+  <div id="settingsModal" class="overlay hidden">
+    <div class="card" style="text-align:left;">
+      <h2 style="margin:0 0 8px 0; color:var(--accent); font-size:20px;">⚙️ Inställningar & Synk</h2>
+
+      <div style="margin-bottom:12px; padding:10px; background:#0f172a; border-radius:12px; border:1px solid #334155;">
+        <label style="font-size:12px; font-weight:800; color:var(--info);">1. Google Gemini API-nyckel (Oändliga frågor):</label>
+        <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..." />
+        <p style="font-size:11px; color:#94a3b8; margin:5px 0 0 0;">
+          Gör att spelet hämtar nya unika frågor för Lgr22 (Åk 3 & Åk 7) varje omgång så frågorna aldrig upprepas.
+        </p>
+      </div>
+
+      <div style="margin-bottom:12px; padding:10px; background:#0f172a; border-radius:12px; border:1px solid #334155;">
+        <label style="font-size:12px; font-weight:800; color:#4ade80;">2. Firebase Realtime Database URL (Synka två iPhones):</label>
+        <input type="url" id="firebaseUrlInput" placeholder="https://ditt-projekt.europe-west1.firebasedatabase.app" />
+        <p style="font-size:11px; color:#94a3b8; margin:5px 0 0 0;">
+          Klistra in samma länk på båda telefonerna för att dela <b>Veckans Pott</b> mellan Roc och Aura i realtid.
+        </p>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:12px;">
+        <button class="btn" id="closeSettingsBtn" style="flex:1;">Stäng</button>
+        <button class="btn btn-primary" id="saveSettingsBtn" style="flex:2; margin-top:0; font-size:15px; padding:12px;">Spara inställningar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over & Veckans Pott Screen -->
   <div id="gameOverScreen" class="overlay hidden">
     <div class="card">
-      <div style="font-size:40px; margin-bottom:2px;" id="gameOverEmoji">⏱️</div>
-      <h1 style="color:var(--accent); font-size:21px;" id="gameOverTitle">Tiden är ute!</h1>
+      <div style="font-size:38px; margin-bottom:2px;" id="gameOverEmoji">⏱️</div>
+      <h1 style="color:var(--accent); font-size:20px;" id="gameOverTitle">Tiden är ute!</h1>
       <p style="color:#cbd5e1; font-size:12px; margin:2px 0 8px 0;" id="gameOverReason">5 minuter har gått!</p>
 
-      <div style="background:#0f172a; padding:10px; border-radius:14px; border:1px solid rgba(250,204,21,0.35);">
-        <div style="font-size:12px; color:#94a3b8;">Omgångens poäng för <b id="endPlayerName" style="color:white;">Aura</b></div>
-        <div style="font-size:30px; font-weight:900; color:var(--accent);" id="finalTotalScore">0 p</div>
-        <div style="font-size:11.5px; color:#38bdf8; font-weight:700;" id="roundFocusBadge">Fokus & Reflex-index: 0%</div>
+      <div style="background:#0f172a; padding:9px; border-radius:14px; border:1px solid rgba(250,204,21,0.35);">
+        <div style="font-size:11.5px; color:#94a3b8;">Omgångens poäng för <b id="endPlayerName" style="color:white;">Aura</b></div>
+        <div style="font-size:28px; font-weight:900; color:var(--accent);" id="finalTotalScore">0 p</div>
+        <div style="font-size:11px; color:#38bdf8; font-weight:700;" id="roundFocusBadge">Fokus & Reflex-index: 0%</div>
       </div>
 
       <div class="stats-grid">
@@ -704,16 +726,17 @@
         </div>
       </div>
 
+      <!-- Veckans Pott (Synkad tävling som nollställs varje måndag) -->
       <div class="battle-box">
         <div class="battle-header">
-          <span>⚔️ ROC vs AURA (SAMMANLAGT)</span>
-          <span id="battleLeaderTag" style="color:var(--accent); font-size:11.5px;">Lika!</span>
+          <span>🏆 VECKANS POTT (<span id="weekLabel">Vecka --</span>)</span>
+          <span id="battleLeaderTag" style="color:var(--accent); font-size:11px;">Laddar...</span>
         </div>
         <div class="battle-cols">
           <div class="fighter-card" id="rocCard">
             <div class="fighter-name">🐭 Roc</div>
             <div class="fighter-metric" id="rocStatsText">
-              Totalt: <b>0 p</b><br>
+              Veckopoäng: <b>0 p</b><br>
               Rätt svar: <b>0 st</b><br>
               Fokusindex: <b>0%</b>
             </div>
@@ -721,7 +744,7 @@
           <div class="fighter-card" id="auraCard">
             <div class="fighter-name">🐹 Aura</div>
             <div class="fighter-metric" id="auraStatsText">
-              Totalt: <b>0 p</b><br>
+              Veckopoäng: <b>0 p</b><br>
               Rätt svar: <b>0 st</b><br>
               Fokusindex: <b>0%</b>
             </div>
@@ -729,10 +752,11 @@
         </div>
       </div>
 
+      <!-- Tidigare veckovinnare & Senaste rekord -->
       <div class="leaderboard-box">
         <div class="leaderboard-title">
-          <span>🏆 SENASTE REKORD</span>
-          <span id="clearRecordsBtn" style="font-size:11px; color:#64748b; cursor:pointer; text-decoration:underline;">Nollställ allt</span>
+          <span>📅 VECKOVINNARE & REKORD</span>
+          <span id="syncStatusFooter" style="font-size:10.5px; color:#4ade80;">Lokal lagring</span>
         </div>
         <div id="leaderboardList"></div>
       </div>
@@ -744,126 +768,55 @@
 
 <script>
 /* ==========================================================================
-   1. MASSIV FRÅGEBANK – ÅRSKURS 3 (ROC - LGR22 + VISUELL LOGIK)
+   1. RESERV-FRÅGEBANKER (ANVÄNDS DIREKT MEDAN AI HÄMTAR NYA FRÅGOR)
    ========================================================================== */
-const QUESTIONS_AK3 = [
+const FALLBACK_AK3 = [
   { subject: "matematik", difficulty: "easy", q: "Vad är 47 + 35?", options: ["82", "72", "92", "81"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Vilket tal är hälften av 64?", options: ["32", "34", "22", "128"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Hur många minuter är en timme och en kvart?", options: ["75 minuter", "65 minuter", "45 minuter", "90 minuter"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Vad är 6 · 7?", options: ["42", "36", "48", "49"], answer: 0 },
-  { subject: "matematik", difficulty: "easy", q: "Vilket tal kommer närmast efter 399?", options: ["400", "398", "401", "300"], answer: 0 },
-  { subject: "matematik", difficulty: "easy", q: "Hur många centimeter är 2 meter?", options: ["200 cm", "20 cm", "2000 cm", "100 cm"], answer: 0 },
-  { subject: "matematik", difficulty: "easy", q: "Vad är dubbelt så mycket som 38?", options: ["76", "66", "78", "68"], answer: 0 },
-  { subject: "matematik", difficulty: "easy", q: "Vilket tal saknas: 15, 20, 25, ___, 35?", options: ["30", "28", "40", "26"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "Du har 100 kr och köper en glass för 28 kr och ett äpple för 14 kr. Hur mycket får du tillbaka?", options: ["58 kr", "62 kr", "42 kr", "68 kr"], answer: 0 },
-  { subject: "matematik", difficulty: "hard", q: "Dela 36 lika mellan 4 barn. Hur många får varje barn?", options: ["9", "8", "7", "6"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "En kvadrat har sidan 5 cm. Hur lång är hela omkretsen runt kvadraten?", options: ["20 cm", "25 cm", "10 cm", "15 cm"], answer: 0 },
-  { subject: "matematik", difficulty: "hard", q: "Vilket bråk visar en fjärdedel?", options: ["1/4", "1/2", "1/3", "4/1"], answer: 0 },
-  { subject: "matematik", difficulty: "hard", q: "Klockan är 14:40. Hur många minuter är det kvar till klockan 15:00?", options: ["20 minuter", "40 minuter", "10 minuter", "30 minuter"], answer: 0 },
-  { subject: "matematik", difficulty: "hard", q: "Ett tåg har 4 vagnar. I varje vagn sitter 25 personer. Hur många är det totalt?", options: ["100", "80", "75", "125"], answer: 0 },
-
   { subject: "no", difficulty: "easy", q: "Vad heter vår närmaste stjärna som ger jorden ljus och värme?", options: ["Solen", "Månen", "Polstjärnan", "Mars"], answer: 0 },
-  { subject: "no", difficulty: "easy", q: "Vilken årstid kommer efter vintern?", options: ["Våren", "Sommaren", "Hösten", "Midvintern"], answer: 0 },
-  { subject: "no", difficulty: "easy", q: "Vad händer med vatten när det blir kallare än 0 grader?", options: ["Det fryser till is", "Det börjar koka", "Det blir till ånga", "Ingenting händer"], answer: 0 },
-  { subject: "no", difficulty: "easy", q: "Hur många ben har en insekt (t.ex. en myra)?", options: ["6 ben", "8 ben", "4 ben", "10 ben"], answer: 0 },
   { subject: "no", difficulty: "hard", q: "Vad kallas djur som bara äter växter (t.ex. älg och hare)?", options: ["Växtätare", "Köttätare", "Allätare", "Rovdjur"], answer: 0 },
-  { subject: "no", difficulty: "hard", q: "Vilket organ pumpar runt blodet i hela kroppen?", options: ["Hjärtat", "Lungorna", "Magsäcken", "Hjärnan"], answer: 0 },
-  { subject: "no", difficulty: "hard", q: "Varför flyter en kork i vatten?", options: ["Den har lägre densitet än vatten", "Den är rund", "Den är gjord av metall", "Vattnet är kallt"], answer: 0 },
-
   { subject: "so", difficulty: "easy", q: "Vad heter Sveriges huvudstad?", options: ["Stockholm", "Göteborg", "Malmö", "Uppsala"], answer: 0 },
-  { subject: "so", difficulty: "easy", q: "Vilka färger har Sveriges flagga?", options: ["Blå och gul", "Röd och vit", "Blå och vit", "Grön och gul"], answer: 0 },
-  { subject: "so", difficulty: "easy", q: "Vilket väderstreck pekar kompassnålen alltid mot?", options: ["Norr", "Söder", "Öster", "Väster"], answer: 0 },
   { subject: "so", difficulty: "hard", q: "Vilka två länder har landgräns mot Sverige?", options: ["Norge och Finland", "Danmark och Norge", "Finland och Ryssland", "Tyskland och Danmark"], answer: 0 },
-  { subject: "so", difficulty: "hard", q: "Vad kallas den tid för mycket länge sedan då man gjorde verktyg av sten?", options: ["Stenåldern", "Bronsåldern", "Järnåldern", "Vikingatiden"], answer: 0 },
-  { subject: "so", difficulty: "hard", q: "Vilken är Sveriges största ö?", options: ["Gotland", "Öland", "Orust", "Hisingen"], answer: 0 },
-
-  { subject: "svenska", difficulty: "easy", q: "Vilket ord är ett substantiv (namn på saker, djur eller personer)?", options: ["Hund", "Springa", "Glad", "Snabbt"], answer: 0 },
-  { subject: "svenska", difficulty: "easy", q: "Vilket tecken sätter man i slutet av en fråga?", options: ["Frågetecken (?)", "Utropstecken (!)", "Punkt (.)", "Kommatecken (,)"], answer: 0 },
+  { subject: "svenska", difficulty: "easy", q: "Vilket ord är ett substantiv?", options: ["Hund", "Springa", "Glad", "Snabbt"], answer: 0 },
   { subject: "svenska", difficulty: "hard", q: "Vilka bokstäver är vokaler i ordet 'SOLROS'?", options: ["O och O", "S, L och R", "S och O", "R och L"], answer: 0 },
-  { subject: "svenska", difficulty: "hard", q: "Vad är motsatsordet (antonymen) till 'modig'?", options: ["Rädd / feg", "Stark", "Snäll", "Arg"], answer: 0 },
-
   { subject: "engelska", difficulty: "easy", q: "Vad heter 'äpple' på engelska?", options: ["Apple", "Banana", "Orange", "Pear"], answer: 0 },
-  { subject: "engelska", difficulty: "easy", q: "Vilken färg är 'blue'?", options: ["Blå", "Grön", "Gul", "Röd"], answer: 0 },
-  { subject: "engelska", difficulty: "hard", q: "Hur säger man 'Jag är nio år gammal' på engelska?", options: ["I am nine years old", "I have nine years", "My name is nine", "I are nine years"], answer: 0 },
   { subject: "engelska", difficulty: "hard", q: "Vad betyder 'Wednesday' på svenska?", options: ["Onsdag", "Tisdag", "Torsdag", "Fredag"], answer: 0 },
-
   { subject: "logik", difficulty: "easy", visual: true, q: "Vilken figur kommer härnäst i mönstret?", diagram: "🔴 🔵 🔴 🔵 🔴 ❓", options: ["🔵", "🔴", "🟢", "🟡"], answer: 0 },
   { subject: "logik", difficulty: "easy", visual: true, q: "Vilken figur hör INTE hemma här?", diagram: "🍎   🍌   🍇   🚗", options: ["🚗", "🍎", "🍌", "🍇"], answer: 0 },
-  { subject: "logik", difficulty: "easy", visual: true, q: "Räkna stjärnorna! Hur många är det totalt?", diagram: "⭐⭐⭐\n⭐⭐⭐⭐", options: ["7", "6", "8", "5"], answer: 0 },
-  { subject: "logik", difficulty: "easy", visual: true, q: "Vilken pil pekar åt HÖGER?", diagram: "Välj rätt pil:", options: ["➡️", "⬅️", "⬆️", "⬇️"], answer: 0 },
   { subject: "logik", difficulty: "hard", visual: true, q: "Fyll i den saknade biten i rutnätet:", diagram: "🔺 🟡\n🟡 ❓", options: ["🔺", "🟡", "🟦", "🟢"], answer: 0 },
-  { subject: "logik", difficulty: "hard", visual: true, q: "Vilket mönster växer med 1 prick varje steg?", diagram: "⚫  ➡️  ⚫⚫  ➡️  ⚫⚫⚫  ➡️  ❓", options: ["⚫⚫⚫⚫", "⚫⚫", "⚫⚫⚫⚫⚫", "⚫"], answer: 0 },
-  { subject: "logik", difficulty: "hard", visual: true, q: "Spegelbild! Vilken rad är helt symmetrisk?", diagram: "Titta noga på ordningen:", options: ["🟦 🔴 🟦", "🟦 🔴 🟡", "🔴 🟦 🟦", "🟡 🟡 🔴"], answer: 0 },
-  { subject: "logik", difficulty: "hard", visual: true, q: "Vilken form har FLEST hörn?", diagram: "Jämför figurerna:", options: ["⬡ Sexhörning", "⬜ Kvadrat", "🔺 Triangel", "⭕ Cirkel"], answer: 0 }
+  { subject: "logik", difficulty: "hard", visual: true, q: "Spegelbild! Vilken rad är helt symmetrisk?", diagram: "Titta noga på ordningen:", options: ["🟦 🔴 🟦", "🟦 🔴 🟡", "🔴 🟦 🟦", "🟡 🟡 🔴"], answer: 0 }
 ];
 
-/* ==========================================================================
-   2. MASSIV FRÅGEBANK – ÅRSKURS 7 (AURA - LGR22 + VISUELL INTELLIGENS)
-   ========================================================================== */
-const QUESTIONS_AK7 = [
+const FALLBACK_AK7 = [
   { subject: "matematik", difficulty: "easy", q: "Beräkna värdet av uttrycket: 5 - 3 · (-4)", options: ["17", "-8", "-7", "8"], answer: 0 },
-  { subject: "matematik", difficulty: "easy", q: "Vilket bråk är störst: 3/4, 7/10 eller 11/15?", options: ["3/4", "11/15", "7/10", "Alla är lika stora"], answer: 0 },
-  { subject: "matematik", difficulty: "easy", q: "En vara höjs med 10 % från 200 kr. Vad kostar den sedan?", options: ["220 kr", "210 kr", "202 kr", "240 kr"], answer: 0 },
   { subject: "matematik", difficulty: "easy", q: "Lös ekvationen: 4(x - 2) = 20", options: ["x = 7", "x = 5,5", "x = 3", "x = 4,5"], answer: 0 },
-  { subject: "matematik", difficulty: "easy", q: "Vad är medianen av talen: 12, 4, 19, 7, 15?", options: ["12", "11,4", "19", "7"], answer: 0 },
-  { subject: "matematik", difficulty: "easy", q: "Vad är 10³ + 10²?", options: ["1 100", "10 000", "105", "50"], answer: 0 },
-  { subject: "matematik", difficulty: "easy", q: "Förenkla uttrycket: 3a + 5b - a + 2b", options: ["2a + 7b", "4a + 7b", "9ab", "2a + 3b"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "Ett pris sänks med 20 % och höjs sedan med 20 %. Hur har priset förändrats totalt?", options: ["Minskat med 4 %", "Oförändrat (0 %)", "Ökat med 4 %", "Minskat med 2 %"], answer: 0 },
   { subject: "matematik", difficulty: "hard", q: "Beräkna (2 · 10⁴) · (4 · 10³) i grundpotensform.", options: ["8 · 10⁷", "8 · 10¹²", "6 · 10⁷", "8 · 10¹"], answer: 0 },
-  { subject: "matematik", difficulty: "hard", q: "En cirkel har diametern 10 cm. Vilken är arean ungefär? (π ≈ 3,14)", options: ["78,5 cm²", "31,4 cm²", "314 cm²", "15,7 cm²"], answer: 0 },
-  { subject: "matematik", difficulty: "hard", q: "Lös ekvationen: 5x - 7 = 2x + 11", options: ["x = 6", "x = 4", "x = 18/7", "x = 2"], answer: 0 },
-  { subject: "matematik", difficulty: "hard", q: "Sannolikheten att dra en röd kula är 0,35. Hur stor är sannolikheten att INTE dra en röd kula?", options: ["0,65", "0,35", "0,75", "0,50"], answer: 0 },
-  { subject: "matematik", difficulty: "hard", q: "Skalan på en karta är 1 : 50 000. Hur långt i verkligheten motsvarar 4 cm på kartan?", options: ["2 km", "20 km", "200 m", "5 km"], answer: 0 },
-
   { subject: "no", difficulty: "easy", q: "Vilken gas tar växter upp genom klyvöppningarna vid fotosyntesen?", options: ["Koldioxid (CO₂)", "Syrgas (O₂)", "Kvävgas (N₂)", "Vätgas (H₂)"], answer: 0 },
-  { subject: "no", difficulty: "easy", q: "Vad kallas övergången när ett ämne går direkt från fast form till gasform?", options: ["Sublimering", "Kondensering", "Smältning", "Förångning"], answer: 0 },
-  { subject: "no", difficulty: "easy", q: "Vad kallas de blodkärl som leder blodet BORT från hjärtat?", options: ["Artärer", "Vener", "Kapillärer", "Lymfkärl"], answer: 0 },
-  { subject: "no", difficulty: "easy", q: "Vilket grundämne är vanligast i jordens atmosfär (cirka 78 %)?", options: ["Kväve", "Syre", "Koldioxid", "Argon"], answer: 0 },
   { subject: "no", difficulty: "hard", q: "En atom har atomnummer 11 och masstal 23. Hur många neutroner har den?", options: ["12", "11", "23", "34"], answer: 0 },
-  { subject: "no", difficulty: "hard", q: "Varför flyter is på flytande vatten?", options: ["Is har lägre densitet än vatten", "Is har högre ytspänning", "Vattenmolekylerna blir tyngre vid 0 °C", "Is innehåller bara syre"], answer: 0 },
-  { subject: "no", difficulty: "hard", q: "Vad bildas när en syra och en bas neutraliserar varandra?", options: ["Salt och vatten", "Vätgas och syrgas", "Koldioxid och alkohol", "En starkare syra"], answer: 0 },
-  { subject: "no", difficulty: "hard", q: "Vilken del av ögat bryter ljuset mest och ändrar form vid ackommodation?", options: ["Linsen", "Hornhinnan", "Näthinnan", "Regnbågshinnan"], answer: 0 },
-
   { subject: "so", difficulty: "easy", q: "Vilken fred år 1658 gjorde att Skåne, Halland och Blekinge blev svenska?", options: ["Freden i Roskilde", "Freden i Brömsebro", "Westfaliska freden", "Freden i Knäred"], answer: 0 },
-  { subject: "so", difficulty: "easy", q: "Vad kallas det statsskick där en monark är statschef men saknar politisk makt?", options: ["Konstitutionell monarki", "Absolut monarki", "Parlamentarisk republik", "Diktatur"], answer: 0 },
-  { subject: "so", difficulty: "easy", q: "Vilka tre världsreligioner räknas som de abrahamitiska religionerna?", options: ["Judendom, kristendom och islam", "Hinduism, buddhism och sikhism", "Kristendom, hinduism och islam", "Judendom, buddhism och islam"], answer: 0 },
   { subject: "so", difficulty: "hard", q: "Vad innebar 'reduktionen' under Karl XI:s regeringstid på 1680-talet?", options: ["Adeln tvingades lämna tillbaka gods till kronan", "Sverige minskade sin armé med hälften", "Bönderna fick rösträtt i riksdagen", "Skatterna sänktes för alla stånd"], answer: 0 },
-  { subject: "so", difficulty: "hard", q: "Vad menas med 'inflationsmål' i svensk ekonomisk politik (Riksbanken)?", options: ["Att priserna ska öka med cirka 2 % per år", "Att arbetslösheten ska vara 0 %", "Att kronan ska ha exakt samma värde som euron", "Att statsskulden ska fördubblas"], answer: 0 },
-  { subject: "so", difficulty: "hard", q: "Vad heter de fem Moseböckerna som utgör den heliga läran inom judendomen?", options: ["Torah", "Talmud", "Tipitaka", "Veda"], answer: 0 },
-
-  { subject: "svenska", difficulty: "easy", q: "Vilken satsdel är 'snabbt' i meningen: 'Musen sprang snabbt över golvet'?", options: ["Adverbial", "Predikat", "Objekt", "Subjekt"], answer: 0 },
   { subject: "svenska", difficulty: "easy", q: "Vad kallas det när man i retorik vädjar till lyssnarens känslor?", options: ["Pathos", "Ethos", "Logos", "Kairos"], answer: 0 },
   { subject: "svenska", difficulty: "hard", q: "Vilka är Sveriges fem nationella minoritetsspråk?", options: ["Finska, jiddisch, meänkieli, romani chib och samiska", "Finska, norska, danska, samiska och estniska", "Samiska, finska, arabiska, romani och tyska", "Meänkieli, älvdalska, jiddisch, samiska och finska"], answer: 0 },
-  { subject: "svenska", difficulty: "hard", q: "Vad innebär begreppet 'källkritiskt tendenskriterium'?", options: ["Att undersöka om källan är partisk eller har ett eget intresse", "Att kontrollera exakt när källan skapades", "Att se om källan är en förstahandskälla", "Att räkna hur många som delar texten"], answer: 0 },
-  { subject: "svenska", difficulty: "hard", q: "Vilken stilfigur används i: 'Vinden viskade hemligheter i träden'?", options: ["Besjälning", "Liknelse", "Allitteration", "Eufemism"], answer: 0 },
-
   { subject: "engelska", difficulty: "easy", q: "Which word is correct? 'Neither of the boys ___ ready.'", options: ["was", "were", "are", "have"], answer: 0 },
-  { subject: "engelska", difficulty: "easy", q: "Choose the correct relative pronoun: 'The girl ___ bag was stolen called the police.'", options: ["whose", "who's", "which", "whom"], answer: 0 },
   { subject: "engelska", difficulty: "hard", q: "What does the idiom 'to bite the bullet' mean?", options: ["To face a difficult situation bravely", "To eat very quickly", "To make a terrible mistake", "To stop talking suddenly"], answer: 0 },
-  { subject: "engelska", difficulty: "hard", q: "Which sentence uses the passive voice correctly?", options: ["The novel was written by a Swedish author.", "A Swedish author was writing the novel.", "The novel wrote itself yesterday.", "She has written a new novel."], answer: 0 },
-
   { subject: "logik", difficulty: "easy", visual: true, q: "Vilken symbol fullbordar matrisen?", diagram: "🔺 ⬜ 🔵\n⬜ 🔵 🔺\n🔵 🔺 ❓", options: ["⬜", "🔺", "🔵", "🟡"], answer: 0 },
   { subject: "logik", difficulty: "easy", visual: true, q: "Vilken figur roterar 90° medurs i varje steg?", diagram: "⬆️  ➡️  ⬇️  ❓", options: ["⬅️", "⬆️", "↗️", "⬇️"], answer: 0 },
-  { subject: "logik", difficulty: "easy", visual: true, q: "Vilken grupp avviker från mönstret?", diagram: "Jämför paren:", options: ["🔴 🔵", "🟢 🟢", "🟡 🟡", "🟣 🟣"], answer: 0 },
-  { subject: "logik", difficulty: "easy", visual: true, q: "Hur många svarta rutor finns i schackmönstret?", diagram: "⬛⬜⬛⬜\n⬜⬛⬜⬛\n⬛⬜⬛⬜", options: ["6", "5", "7", "8"], answer: 0 },
   { subject: "logik", difficulty: "hard", visual: true, q: "Vilken figur saknas i den logiska följden?", diagram: "🌕 🌗 🌑 🌓 ❓", options: ["🌕", "🌑", "🌗", "🌔"], answer: 0 },
-  { subject: "logik", difficulty: "hard", visual: true, q: "Hitta rätt spegelvändning (vänster ↔ höger):", diagram: "Original:  ◀️ 🔼 🔵", options: ["🔵 🔼 ▶️", "▶️ 🔼 🔵", "🔵 🔽 ◀️", "◀️ 🔽 🔵"], answer: 0 },
-  { subject: "logik", difficulty: "hard", visual: true, q: "Logisk matris: Vilken bit passar i nedre högra hörnet?", diagram: "➕ ➖ ✖️\n➖ ✖️ ➕\n✖️ ➕ ❓", options: ["➖", "➕", "✖️", "➗"], answer: 0 },
-  { subject: "logik", difficulty: "hard", visual: true, q: "Vilken kombination följer regeln: 'Alltid 2 cirklar och 1 triangel'?", diagram: "Välj rätt uppsättning:", options: ["🔵 🔺 🔴", "🔵 🔵 🔴", "🔺 🔺 🔵", "⬜ 🔵 🔺"], answer: 0 }
+  { subject: "logik", difficulty: "hard", visual: true, q: "Logisk matris: Vilken bit passar i nedre högra hörnet?", diagram: "➕ ➖ ✖️\n➖ ✖️ ➕\n✖️ ➕ ❓", options: ["➖", "➕", "✖️", "➗"], answer: 0 }
 ];
 
 /* ==========================================================================
-   3. WEB AUDIO SYNTHESIZER
+   2. WEB AUDIO SYNTHESIZER
    ========================================================================== */
 class SoundFX {
-  constructor() {
-    this.ctx = null;
-    this.muted = false;
-  }
+  constructor() { this.ctx = null; this.muted = false; }
   init() {
-    if (!this.ctx) {
-      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-    }
+    if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
     if (this.ctx.state === 'suspended') this.ctx.resume();
   }
   playTone(freq, type, duration, slideTo = null, vol = 0.16) {
@@ -872,9 +825,7 @@ class SoundFX {
     const gain = this.ctx.createGain();
     osc.type = type;
     osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-    if (slideTo) {
-      osc.frequency.exponentialRampToValueAtTime(slideTo, this.ctx.currentTime + duration);
-    }
+    if (slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, this.ctx.currentTime + duration);
     gain.gain.setValueAtTime(vol, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
     osc.connect(gain);
@@ -911,9 +862,9 @@ class SoundFX {
 const sfx = new SoundFX();
 
 /* ==========================================================================
-   4. SPELVARIABLER & 5-MINUTERS NEDRÄKNING
+   3. SPELVARIABLER, INSTÄLLNINGAR & VECKO-ID (ISO WEEK)
    ========================================================================== */
-const TOTAL_GAME_SECONDS = 300; // 5 minuter
+const TOTAL_GAME_SECONDS = 300;
 const GRID_SIZE = 12;
 const gridEl = document.getElementById('grid');
 const holes = [];
@@ -921,40 +872,26 @@ const holes = [];
 for (let i = 0; i < GRID_SIZE; i++) {
   const hole = document.createElement('div');
   hole.className = 'hole';
-  hole.dataset.index = i;
-
   const entity = document.createElement('div');
   entity.className = 'entity';
-
   const tag = document.createElement('div');
   tag.className = 'entity-tag hidden';
-
   hole.appendChild(entity);
   hole.appendChild(tag);
   gridEl.appendChild(hole);
-
-  holes.push({
-    el: hole,
-    entityEl: entity,
-    tagEl: tag,
-    type: null,
-    timer: null
-  });
-
-  hole.addEventListener('pointerdown', (e) => {
-    e.preventDefault();
-    handleHoleTap(i);
-  });
+  holes.push({ el: hole, entityEl: entity, tagEl: tag, type: null, timer: null });
+  hole.addEventListener('pointerdown', (e) => { e.preventDefault(); handleHoleTap(i); });
 }
 
 let gameState = 'MENU';
-let selectedGrade = '7'; // '3' = Roc (🐭), '7' = Aura (🐹)
+let selectedGrade = '7';
 let selectedSubject = 'blandat';
 let customQuestions = JSON.parse(localStorage.getItem('fragost_custom_q') || '[]');
 let customTopicName = localStorage.getItem('fragost_custom_topic') || '';
 let geminiApiKey = localStorage.getItem('fragost_gemini_key') || '';
+let firebaseDbUrl = (localStorage.getItem('fragost_firebase_url') || '').replace(/\/+$/, '');
+let seenQuestionHistory = JSON.parse(localStorage.getItem('fragost_seen_q') || '[]');
 
-// Live-poäng & statistik för omgången
 let currentScore = 0;
 let timeRemaining = TOTAL_GAME_SECONDS;
 let miceSpawned = 0;
@@ -971,18 +908,27 @@ let quizInterval = null;
 let questionDeck = [];
 let visualDeck = [];
 
+function getISOWeekInfo(date = new Date()) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return {
+    key: `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`,
+    label: `Vecka ${weekNo}`
+  };
+}
+
 function getPlayerInfo() {
-  if (selectedGrade === '3') {
-    return { id: 'roc', name: 'Roc', emoji: '🐭', grade: '3' };
-  }
-  return { id: 'aura', name: 'Aura', emoji: '🐹', grade: '7' };
+  return selectedGrade === '3'
+    ? { id: 'roc', name: 'Roc', emoji: '🐭', grade: '3' }
+    : { id: 'aura', name: 'Aura', emoji: '🐹', grade: '7' };
 }
 
 function formatMMSS(sec) {
   const s = Math.max(0, Math.ceil(sec));
-  const mins = Math.floor(s / 60);
-  const secs = s % 60;
-  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 }
 
 function updateLiveHUD() {
@@ -990,19 +936,25 @@ function updateLiveHUD() {
   document.getElementById('hudPlayerBadge').textContent = `${p.emoji} ${p.name}`;
   document.getElementById('livePointsDisplay').textContent = currentScore;
   document.getElementById('timeLeftDisplay').textContent = formatMMSS(timeRemaining);
-  const pct = Math.max(0, (timeRemaining / TOTAL_GAME_SECONDS) * 100);
-  document.getElementById('gameTimerBar').style.width = `${pct}%`;
+  document.getElementById('gameTimerBar').style.width = `${Math.max(0, (timeRemaining / TOTAL_GAME_SECONDS) * 100)}%`;
 }
 
 function computeFocusIndex(mCaught, mSpawned, qCorrect, qWrong, eMisses, cHit) {
-  const mouseAccuracy = mSpawned > 0 ? (mCaught / mSpawned) : 0.75;
+  const mouseAcc = mSpawned > 0 ? (mCaught / mSpawned) : 0.75;
   const totalQ = qCorrect + qWrong;
-  const quizAccuracy = totalQ > 0 ? (qCorrect / totalQ) : 0.75;
-  let rawIndex = (mouseAccuracy * 50) + (quizAccuracy * 50);
-  rawIndex -= (eMisses * 2.5);
-  rawIndex -= (cHit * 8);
-  return Math.max(0, Math.min(100, Math.round(rawIndex)));
+  const quizAcc = totalQ > 0 ? (qCorrect / totalQ) : 0.75;
+  return Math.max(0, Math.min(100, Math.round((mouseAcc * 50) + (quizAcc * 50) - (eMisses * 2.5) - (cHit * 8))));
 }
+
+function updateCloudBadge() {
+  const badge = document.getElementById('cloudStatusBadge');
+  if (firebaseDbUrl) {
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+}
+updateCloudBadge();
 
 function updateCustomSubjectButton() {
   const btn = document.getElementById('customSubjectBtn');
@@ -1015,6 +967,209 @@ function updateCustomSubjectButton() {
 }
 updateCustomSubjectButton();
 
+/* ==========================================================================
+   4. INSTÄLLNINGAR MODAL (API-NYCKEL & FIREBASE)
+   ========================================================================== */
+document.getElementById('openSettingsBtn').addEventListener('click', () => {
+  document.getElementById('geminiApiKeyInput').value = geminiApiKey;
+  document.getElementById('firebaseUrlInput').value = firebaseDbUrl;
+  document.getElementById('settingsModal').classList.remove('hidden');
+});
+
+document.getElementById('closeSettingsBtn').addEventListener('click', () => {
+  document.getElementById('settingsModal').classList.add('hidden');
+});
+
+document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+  geminiApiKey = document.getElementById('geminiApiKeyInput').value.trim();
+  firebaseDbUrl = document.getElementById('firebaseUrlInput').value.trim().replace(/\/+$/, '');
+  localStorage.setItem('fragost_gemini_key', geminiApiKey);
+  localStorage.setItem('fragost_firebase_url', firebaseDbUrl);
+  updateCloudBadge();
+  document.getElementById('settingsModal').classList.add('hidden');
+});
+
+/* ==========================================================================
+   5. GEMINI AI-MOTOR (AUTO-MODELL + OÄNDLIGA LGR22-FRÅGOR UTAN UPPREPNING)
+   ========================================================================== */
+async function callGeminiForQuestions(promptText) {
+  if (!geminiApiKey) throw new Error("Ingen Gemini API-nyckel sparad (klicka på ⚙️).");
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 22000);
+
+  let targetModel = "models/gemini-2.5-flash";
+  try {
+    const listRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(geminiApiKey)}`,
+      { signal: controller.signal }
+    );
+    if (listRes.ok) {
+      const listData = await listRes.json();
+      const validFlash = (listData.models || []).find(
+        m => m.name && m.name.includes("flash") && (m.supportedGenerationMethods || []).includes("generateContent")
+      );
+      if (validFlash) targetModel = validFlash.name;
+    }
+  } catch (_) {}
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/${targetModel}:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: promptText }] }],
+        generationConfig: {
+          temperature: 0.85,
+          responseMimeType: "application/json"
+        }
+      })
+    }
+  );
+  clearTimeout(timeoutId);
+
+  if (!response.ok) {
+    const errData = await response.json().catch(() => ({}));
+    throw new Error(errData.error?.message || `API-fel (${response.status})`);
+  }
+
+  const data = await response.json();
+  const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  const cleaned = rawText.replace(/^```json/i, '').replace(/^```/, '').replace(/```$/, '').trim();
+  const parsed = JSON.parse(cleaned);
+  if (!Array.isArray(parsed) || parsed.length < 4) {
+    throw new Error("Ogiltigt svar från AI.");
+  }
+  return parsed;
+}
+
+// Bakgrundsgenerering av nya Lgr22-frågor vid spelstart så de aldrig upprepas
+async function prefetchAiCurriculumQuestions() {
+  if (!geminiApiKey || selectedSubject === 'custom' || selectedSubject === 'logik') return;
+
+  const p = getPlayerInfo();
+  const subjectMap = {
+    blandat: "en blandning av Matematik, NO (biologi, fysik, kemi), SO (historia, geografi, samhällskunskap, religion), Svenska och Engelska",
+    matematik: "Matematik (taluppfattning, algebra, geometri, procent, sannolikhet)",
+    no: "NO (biologi, fysik och kemi)",
+    so: "SO (historia, geografi, samhällskunskap och religionskunskap)",
+    svenska: "Svenska (grammatik, ordklasser, satsdelar, retorik, källkritik, språkhistoria)",
+    engelska: "Engelska (engelsk grammatik, ordförråd, idiom och läsförståelse med frågor på engelska eller svenska)"
+  };
+
+  const levelDesc = p.grade === '3'
+    ? "årskurs 3 enligt svenska läroplanen Lgr22 (9–10 år)"
+    : "årskurs 7 enligt svenska läroplanen Lgr22 (13–14 år), utmanande nivå";
+
+  const recentAvoid = seenQuestionHistory.slice(-20).join(" | ");
+
+  const prompt = `Du är en svensk lärare. Skapa 16 helt NYA och varierade flervalsfrågor inom ${subjectMap[selectedSubject]} för ${levelDesc}.
+8 frågor ska ha "difficulty": "easy" och 8 frågor ska ha "difficulty": "hard".
+Undvik att upprepa dessa tidigare frågor: [${recentAvoid}].
+Sätt "subject": "${selectedSubject === 'blandat' ? 'matematik' : selectedSubject}" (eller respektive ämne).
+Det RÄTTA svaret ska alltid ligga på index 0 i "options" (4 alternativ totalt).
+Svara ENDAST med en JSON-array:
+[{"subject":"...","difficulty":"easy","q":"...","options":["Rätt","Fel1","Fel2","Fel3"],"answer":0}]`;
+
+  try {
+    const fresh = await callGeminiForQuestions(prompt);
+    const formatted = fresh.map(item => ({
+      subject: item.subject || selectedSubject,
+      difficulty: item.difficulty === "hard" ? "hard" : "easy",
+      q: item.q,
+      options: item.options,
+      answer: typeof item.answer === 'number' ? item.answer : 0
+    }));
+    // Lägg de nya AI-frågorna längst fram i kortleken!
+    questionDeck = [...questionDeck, ...shuffleArray(formatted)];
+  } catch (_) {
+    // Om offline används reservkortleken sömlöst
+  }
+}
+
+/* ==========================================================================
+   6. EGET ÄMNE MODAL (✨ EGET)
+   ========================================================================== */
+function openCustomModal() {
+  if (!geminiApiKey) {
+    document.getElementById('settingsModal').classList.remove('hidden');
+    return;
+  }
+  const p = getPlayerInfo();
+  document.getElementById('modalPlayerName').textContent = `${p.name} (Åk ${p.grade})`;
+  document.getElementById('customTopicInput').value = customTopicName;
+  document.getElementById('aiStatusMsg').style.display = 'none';
+  document.getElementById('customModal').classList.remove('hidden');
+}
+
+document.getElementById('closeCustomModalBtn').addEventListener('click', () => {
+  document.getElementById('customModal').classList.add('hidden');
+});
+
+document.getElementById('generateAiBtn').addEventListener('click', async () => {
+  const topic = document.getElementById('customTopicInput').value.trim();
+  const statusEl = document.getElementById('aiStatusMsg');
+  const genBtn = document.getElementById('generateAiBtn');
+
+  if (!topic) {
+    statusEl.textContent = "Skriv ett ämne först (t.ex. Vikingatiden).";
+    statusEl.style.color = "var(--danger)";
+    statusEl.style.display = "block";
+    return;
+  }
+
+  const p = getPlayerInfo();
+  const levelDesc = p.grade === '3'
+    ? "årskurs 3 i svensk grundskola (9–10 år)"
+    : "årskurs 7 i svensk grundskola (13–14 år), hög svårighetsgrad och kluriga alternativ";
+
+  const prompt = `Skapa 16 unika, djupa och varierande flervalsfrågor på svenska om "${topic}" anpassade för ${levelDesc}.
+8 frågor ska ha "difficulty": "easy" och 8 frågor ska ha "difficulty": "hard".
+Det RÄTTA svaret ska alltid ligga på index 0 i "options" (exakt 4 alternativ).
+Svara ENDAST med en giltig JSON-array:
+[{"subject":"custom","difficulty":"easy","q":"Fråga?","options":["Rätt","Fel1","Fel2","Fel3"],"answer":0}]`;
+
+  genBtn.disabled = true;
+  genBtn.textContent = "Skapar frågor... ⏳";
+  statusEl.textContent = `AI skapar 16 frågor om "${topic}"...`;
+  statusEl.style.color = "var(--info)";
+  statusEl.style.display = "block";
+
+  try {
+    const parsed = await callGeminiForQuestions(prompt);
+    customQuestions = parsed.map(item => ({
+      subject: "custom",
+      difficulty: item.difficulty === "hard" ? "hard" : "easy",
+      q: item.q,
+      options: item.options,
+      answer: typeof item.answer === 'number' ? item.answer : 0
+    }));
+    customTopicName = topic;
+
+    localStorage.setItem('fragost_custom_q', JSON.stringify(customQuestions));
+    localStorage.setItem('fragost_custom_topic', customTopicName);
+
+    updateCustomSubjectButton();
+    document.querySelectorAll('#subjectGrid .btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('customSubjectBtn').classList.add('selected');
+    selectedSubject = 'custom';
+
+    document.getElementById('customModal').classList.add('hidden');
+  } catch (err) {
+    const msg = err.name === 'AbortError' ? 'Tidsgränsen överskreds. Försök igen.' : err.message;
+    statusEl.textContent = `Fel: ${msg}`;
+    statusEl.style.color = "var(--danger)";
+  } finally {
+    genBtn.disabled = false;
+    genBtn.textContent = "Skapa frågor ✨";
+  }
+});
+
+/* ==========================================================================
+   7. SPELKONTROLLER & KORTLEKSHANTERING
+   ========================================================================== */
 document.querySelectorAll('.grade-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('selected'));
@@ -1048,7 +1203,7 @@ document.getElementById('restartBtn').addEventListener('click', () => { sfx.init
 document.getElementById('stopGameBtn').addEventListener('click', () => {
   if (gameState === 'PLAYING') {
     sfx.endChime();
-    finishGame("🏁", "Omgången avslutad!", "Bra tränat! Dina resultat är sparade i utmaningen.");
+    finishGame("🏁", "Omgången avslutad!", "Dina poäng har lagts till i Veckans Pott.");
   }
 });
 document.getElementById('menuBtn').addEventListener('click', () => {
@@ -1062,145 +1217,6 @@ document.getElementById('muteBtn').addEventListener('click', () => {
   document.getElementById('muteBtn').textContent = sfx.muted ? '🔇' : '🔊';
 });
 
-/* ==========================================================================
-   5. DIREKT AI-GENERERING FÖR "EGET ÄMNE" (GOOGLE GEMINI API)
-   ========================================================================== */
-function openCustomModal() {
-  const p = getPlayerInfo();
-  document.getElementById('modalPlayerName').textContent = `${p.name} (Åk ${p.grade})`;
-  document.getElementById('customTopicInput').value = customTopicName;
-  document.getElementById('geminiApiKeyInput').value = geminiApiKey;
-  document.getElementById('aiStatusMsg').style.display = 'none';
-
-  // Visa API-nyckelrutan direkt om nyckel saknas
-  if (!geminiApiKey) {
-    document.getElementById('apiKeySection').classList.remove('hidden');
-  } else {
-    document.getElementById('apiKeySection').classList.add('hidden');
-  }
-
-  document.getElementById('customModal').classList.remove('hidden');
-}
-
-document.getElementById('toggleApiKeyBtn').addEventListener('click', () => {
-  document.getElementById('apiKeySection').classList.toggle('hidden');
-});
-
-document.getElementById('closeCustomModalBtn').addEventListener('click', () => {
-  document.getElementById('customModal').classList.add('hidden');
-});
-
-document.getElementById('generateAiBtn').addEventListener('click', async () => {
-  const topic = document.getElementById('customTopicInput').value.trim();
-  const keyInput = document.getElementById('geminiApiKeyInput').value.trim();
-  const statusEl = document.getElementById('aiStatusMsg');
-  const genBtn = document.getElementById('generateAiBtn');
-
-  if (!topic) {
-    statusEl.textContent = "Skriv ett ämne eller ett ord först (t.ex. Vikingatiden).";
-    statusEl.style.color = "var(--danger)";
-    statusEl.style.display = "block";
-    return;
-  }
-
-  if (keyInput) {
-    geminiApiKey = keyInput;
-    localStorage.setItem('fragost_gemini_key', geminiApiKey);
-  }
-
-  if (!geminiApiKey) {
-    document.getElementById('apiKeySection').classList.remove('hidden');
-    statusEl.textContent = "Klistra in din Gemini API-nyckel ovan för att skapa frågor.";
-    statusEl.style.color = "var(--danger)";
-    statusEl.style.display = "block";
-    return;
-  }
-
-  const p = getPlayerInfo();
-  const levelDesc = p.grade === '3'
-    ? "årskurs 3 i svensk grundskola (9–10 år), pedagogiskt men utmanande för åldern"
-    : "årskurs 7 i svensk grundskola (13–14 år), hög svårighetsgrad, djup förståelse och kluriga distraktorer";
-
-  const prompt = `Du är en skicklig svensk lärare. Skapa 14 varierade och utmanande flervalsfrågor på svenska om ämnet "${topic}" anpassade för ${levelDesc}.
-7 frågor ska ha "difficulty": "easy" (medelsvår) och 7 frågor ska ha "difficulty": "hard" (svår/fördjupning).
-Varje fråga ska ha exakt 4 svarsalternativ i "options" där det RÄTTA svaret alltid ligger på index 0 (spelet blandar dem sedan automatiskt).
-Svara ENDAST med en giltig JSON-array utan markdown eller extra text:
-[
-  {
-    "subject": "custom",
-    "difficulty": "easy",
-    "q": "Frågetext?",
-    "options": ["Rätt svar", "Fel alternativ 1", "Fel alternativ 2", "Fel alternativ 3"],
-    "answer": 0
-  }
-]`;
-
-  genBtn.disabled = true;
-  genBtn.textContent = "Skapar frågor... ⏳";
-  statusEl.textContent = `AI genererar 14 frågor om "${topic}" för ${p.name}...`;
-  statusEl.style.color = "var(--info)";
-  statusEl.style.display = "block";
-
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.7,
-            responseMimeType: "application/json"
-          }
-        })
-      }
-    );
-
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      throw new Error(errData.error?.message || `API-fel (${response.status})`);
-    }
-
-    const data = await response.json();
-    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    const cleaned = rawText.replace(/^```json/i, '').replace(/^```/, '').replace(/```$/, '').trim();
-    const parsed = JSON.parse(cleaned);
-
-    if (!Array.isArray(parsed) || parsed.length < 4) {
-      throw new Error("Kunde inte tolka frågorna från AI.");
-    }
-
-    customQuestions = parsed.map(item => ({
-      subject: "custom",
-      difficulty: item.difficulty === "hard" ? "hard" : "easy",
-      q: item.q,
-      options: item.options,
-      answer: typeof item.answer === 'number' ? item.answer : 0
-    }));
-    customTopicName = topic;
-
-    localStorage.setItem('fragost_custom_q', JSON.stringify(customQuestions));
-    localStorage.setItem('fragost_custom_topic', customTopicName);
-
-    updateCustomSubjectButton();
-    document.querySelectorAll('#subjectGrid .btn').forEach(b => b.classList.remove('selected'));
-    document.getElementById('customSubjectBtn').classList.add('selected');
-    selectedSubject = 'custom';
-
-    document.getElementById('customModal').classList.add('hidden');
-  } catch (err) {
-    statusEl.textContent = `Fel: ${err.message}. Kontrollera API-nyckeln eller internetanslutningen.`;
-    statusEl.style.color = "var(--danger)";
-  } finally {
-    genBtn.disabled = false;
-    genBtn.textContent = "Skapa frågor ✨";
-  }
-});
-
-/* ==========================================================================
-   6. KORTLEKAR & SPAWN-LOGIK
-   ========================================================================== */
 function shuffleArray(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -1210,18 +1226,21 @@ function shuffleArray(arr) {
 }
 
 function buildQuestionDecks() {
-  const baseBank = selectedGrade === '3' ? QUESTIONS_AK3 : QUESTIONS_AK7;
+  const baseBank = selectedGrade === '3' ? FALLBACK_AK3 : FALLBACK_AK7;
   visualDeck = shuffleArray(baseBank.filter(q => q.subject === 'logik'));
 
   let pool = selectedSubject === 'custom' ? [...customQuestions] : [...baseBank];
   if (selectedSubject !== 'blandat' && selectedSubject !== 'custom') {
     pool = pool.filter(q => q.subject === selectedSubject);
   }
-  questionDeck = shuffleArray(pool);
+  // Prioritera frågor som inte nyligen visats
+  const unseen = pool.filter(q => !seenQuestionHistory.includes(q.q));
+  const seen = pool.filter(q => seenQuestionHistory.includes(q.q));
+  questionDeck = [...shuffleArray(seen), ...shuffleArray(unseen)];
 }
 
 function drawNextQuestion(difficulty, forceVisualTimed) {
-  const baseBank = selectedGrade === '3' ? QUESTIONS_AK3 : QUESTIONS_AK7;
+  const baseBank = selectedGrade === '3' ? FALLBACK_AK3 : FALLBACK_AK7;
 
   if (forceVisualTimed && selectedSubject !== 'custom') {
     if (visualDeck.length === 0) {
@@ -1231,11 +1250,24 @@ function drawNextQuestion(difficulty, forceVisualTimed) {
   }
 
   if (questionDeck.length === 0) buildQuestionDecks();
-  const idx = questionDeck.findIndex(q => q.difficulty === difficulty);
-  if (idx !== -1) {
-    return questionDeck.splice(idx, 1)[0];
+
+  // Sök bakifrån så de nyast genererade AI-frågorna dras först
+  let foundIdx = -1;
+  for (let i = questionDeck.length - 1; i >= 0; i--) {
+    if (questionDeck[i].difficulty === difficulty) {
+      foundIdx = i;
+      break;
+    }
   }
-  return questionDeck.pop();
+  const chosen = foundIdx !== -1 ? questionDeck.splice(foundIdx, 1)[0] : questionDeck.pop();
+
+  // Registrera frågan i historiken för att undvika upprepningar
+  if (chosen && chosen.q) {
+    seenQuestionHistory.push(chosen.q);
+    if (seenQuestionHistory.length > 80) seenQuestionHistory.shift();
+    localStorage.setItem('fragost_seen_q', JSON.stringify(seenQuestionHistory));
+  }
+  return chosen;
 }
 
 function clearAllHoles() {
@@ -1255,6 +1287,9 @@ function startGame() {
   clearInterval(quizInterval);
   clearAllHoles();
   buildQuestionDecks();
+
+  // Hämta färska AI-frågor i bakgrunden baserat på Lgr22
+  prefetchAiCurriculumQuestions();
 
   currentScore = 0;
   timeRemaining = TOTAL_GAME_SECONDS;
@@ -1301,19 +1336,14 @@ function gameLoop(now) {
 
 function scheduleNextSpawn(customDelay = null) {
   if (gameState !== 'PLAYING') return;
-
   let delay;
   if (customDelay !== null) {
     delay = customDelay;
   } else {
     const paceRoll = Math.random();
-    if (paceRoll < 0.20) {
-      delay = 1400 + Math.random() * 1000;
-    } else if (paceRoll < 0.55) {
-      delay = 280 + Math.random() * 350;
-    } else {
-      delay = 550 + Math.random() * 650;
-    }
+    if (paceRoll < 0.20) delay = 1400 + Math.random() * 1000;
+    else if (paceRoll < 0.55) delay = 280 + Math.random() * 350;
+    else delay = 550 + Math.random() * 650;
   }
 
   spawnTimeout = setTimeout(() => {
@@ -1382,9 +1412,7 @@ function showEntity(index, type, duration) {
     h.el.style.borderColor = 'rgba(249, 115, 22, 0.65)';
   }
 
-  h.timer = setTimeout(() => {
-    hideEntity(index);
-  }, duration);
+  h.timer = setTimeout(() => hideEntity(index), duration);
 }
 
 function hideEntity(index) {
@@ -1405,9 +1433,6 @@ function showFloatingText(holeEl, text, color) {
   setTimeout(() => el.remove(), 650);
 }
 
-/* ==========================================================================
-   7. TRYCKHANTERING
-   ========================================================================== */
 function handleHoleTap(index) {
   if (gameState !== 'PLAYING') return;
   const h = holes[index];
@@ -1462,7 +1487,6 @@ function openQuiz(isHard) {
   const isFifthChallenge = (quizCounter % 5 === 0);
   const qObj = drawNextQuestion(isHard ? 'hard' : 'easy', isFifthChallenge);
   const hasTimer = isFifthChallenge && qObj.subject !== 'matematik';
-
   const bonusPts = isHard ? 150 : 60;
 
   const badge = document.getElementById('difficultyBadge');
@@ -1497,16 +1521,12 @@ function openQuiz(isHard) {
 
   const listEl = document.getElementById('optionsList');
   listEl.innerHTML = '';
-  if (qObj.visual) {
-    listEl.classList.add('visual-grid');
-  } else {
-    listEl.classList.remove('visual-grid');
-  }
+  if (qObj.visual) listEl.classList.add('visual-grid');
+  else listEl.classList.remove('visual-grid');
 
   const timerStatusEl = document.getElementById('quizTimerStatus');
   const barWrapEl = document.getElementById('quizTimerBarWrap');
   const barEl = document.getElementById('quizTimerBar');
-
   let answered = false;
 
   function resumeAfterQuiz(delayMs) {
@@ -1602,42 +1622,101 @@ function openQuiz(isHard) {
 }
 
 /* ==========================================================================
-   9. ROC vs AURA KUMULATIV TÄVLING & TOPPLISTA
+   9. VECKANS POTT & FIREBASE MOLNSYNK MELLAN IPHONES
    ========================================================================== */
-function getCumulativeBattleData() {
-  const def = {
-    roc: { totalScore: 0, correctQ: 0, focusSum: 0, games: 0 },
-    aura: { totalScore: 0, correctQ: 0, focusSum: 0, games: 0 }
-  };
-  try {
-    return Object.assign(def, JSON.parse(localStorage.getItem('musjakten_battle_v1') || '{}'));
-  } catch (e) {
-    return def;
-  }
+function getDefaultAllWeeks() {
+  return {};
 }
 
-function updateAndRenderBattle(playerId, roundScore, roundCorrectQ, roundFocusIdx) {
-  const battle = getCumulativeBattleData();
-  const p = battle[playerId];
-  p.totalScore += roundScore;
-  p.correctQ += roundCorrectQ;
-  p.focusSum += roundFocusIdx;
-  p.games += 1;
-  localStorage.setItem('musjakten_battle_v1', JSON.stringify(battle));
+async function syncWeeklyBattle(playerId, roundScore, roundCorrectQ, roundFocusIdx) {
+  const weekInfo = getISOWeekInfo();
+  document.getElementById('weekLabel').textContent = weekInfo.label;
 
-  const rocAvgFocus = battle.roc.games > 0 ? Math.round(battle.roc.focusSum / battle.roc.games) : 0;
-  const auraAvgFocus = battle.aura.games > 0 ? Math.round(battle.aura.focusSum / battle.aura.games) : 0;
+  const newRunEntry = {
+    id: Date.now(),
+    playerId,
+    name: playerId === 'roc' ? 'Roc' : 'Aura',
+    mouse: playerId === 'roc' ? '🐭' : '🐹',
+    score: roundScore,
+    correctQ: roundCorrectQ,
+    focusIdx: roundFocusIdx,
+    date: new Date().toLocaleDateString('sv-SE', { month: '2-digit', day: '2-digit' })
+  };
+
+  let allWeeks = JSON.parse(localStorage.getItem('fragost_weeks_v1') || '{}');
+  let recentRuns = JSON.parse(localStorage.getItem('fragost_runs_v1') || '[]');
+
+  // Om Firebase URL är konfigurerad: hämta senaste data från molnet först så båda iPhones slås ihop
+  const syncFooter = document.getElementById('syncStatusFooter');
+  if (firebaseDbUrl) {
+    syncFooter.textContent = "☁️ Synkar...";
+    try {
+      const res = await fetch(`${firebaseDbUrl}/fragost.json`);
+      if (res.ok) {
+        const cloudData = await res.json();
+        if (cloudData) {
+          if (cloudData.weeks) allWeeks = cloudData.weeks;
+          if (Array.isArray(cloudData.runs)) recentRuns = cloudData.runs;
+        }
+      }
+    } catch (_) {}
+  }
+
+  // Initiera aktuell vecka om den inte finns ännu (ny pott varje måndag!)
+  if (!allWeeks[weekInfo.key]) {
+    allWeeks[weekInfo.key] = {
+      label: weekInfo.label,
+      roc: { score: 0, correctQ: 0, focusSum: 0, games: 0 },
+      aura: { score: 0, correctQ: 0, focusSum: 0, games: 0 }
+    };
+  }
+
+  const wData = allWeeks[weekInfo.key][playerId];
+  wData.score += roundScore;
+  wData.correctQ += roundCorrectQ;
+  wData.focusSum += roundFocusIdx;
+  wData.games += 1;
+
+  recentRuns.unshift(newRunEntry);
+  recentRuns = recentRuns.slice(0, 8);
+
+  localStorage.setItem('fragost_weeks_v1', JSON.stringify(allWeeks));
+  localStorage.setItem('fragost_runs_v1', JSON.stringify(recentRuns));
+
+  // Spara tillbaka till Firebase så den andra iPhonen ser det direkt
+  if (firebaseDbUrl) {
+    try {
+      const putRes = await fetch(`${firebaseDbUrl}/fragost.json`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ weeks: allWeeks, runs: recentRuns })
+      });
+      syncFooter.textContent = putRes.ok ? "☁️ Synkad mellan iPhones" : "⚠️ Synkfel (lokalt sparat)";
+    } catch (_) {
+      syncFooter.textContent = "⚠️ Offline (lokalt sparat)";
+    }
+  } else {
+    syncFooter.textContent = "📱 Endast denna enhet (koppla moln i ⚙️)";
+  }
+
+  renderBattleAndHistory(allWeeks, weekInfo.key, recentRuns, newRunEntry.id);
+}
+
+function renderBattleAndHistory(allWeeks, currentWeekKey, recentRuns, currentRunId) {
+  const cur = allWeeks[currentWeekKey];
+  const rocFocus = cur.roc.games > 0 ? Math.round(cur.roc.focusSum / cur.roc.games) : 0;
+  const auraFocus = cur.aura.games > 0 ? Math.round(cur.aura.focusSum / cur.aura.games) : 0;
 
   document.getElementById('rocStatsText').innerHTML = `
-    Totalt: <b>${battle.roc.totalScore} p</b><br>
-    Rätt svar: <b>${battle.roc.correctQ} st</b><br>
-    Fokus & Reflex: <b>${rocAvgFocus}%</b>
+    Veckopott: <b>${cur.roc.score} p</b><br>
+    Rätt svar: <b>${cur.roc.correctQ} st</b><br>
+    Fokusindex: <b>${rocFocus}%</b>
   `;
 
   document.getElementById('auraStatsText').innerHTML = `
-    Totalt: <b>${battle.aura.totalScore} p</b><br>
-    Rätt svar: <b>${battle.aura.correctQ} st</b><br>
-    Fokus & Reflex: <b>${auraAvgFocus}%</b>
+    Veckopott: <b>${cur.aura.score} p</b><br>
+    Rätt svar: <b>${cur.aura.correctQ} st</b><br>
+    Fokusindex: <b>${auraFocus}%</b>
   `;
 
   const rocCard = document.getElementById('rocCard');
@@ -1646,53 +1725,46 @@ function updateAndRenderBattle(playerId, roundScore, roundCorrectQ, roundFocusId
   auraCard.classList.remove('leader');
 
   const leaderTag = document.getElementById('battleLeaderTag');
-  if (battle.roc.totalScore > battle.aura.totalScore) {
+  if (cur.roc.score > cur.aura.score) {
     rocCard.classList.add('leader');
-    leaderTag.textContent = `🐭 Roc leder med +${battle.roc.totalScore - battle.aura.totalScore}p!`;
-  } else if (battle.aura.totalScore > battle.roc.totalScore) {
+    leaderTag.textContent = `🐭 Roc leder +${cur.roc.score - cur.aura.score}p!`;
+  } else if (cur.aura.score > cur.roc.score) {
     auraCard.classList.add('leader');
-    leaderTag.textContent = `🐹 Aura leder med +${battle.aura.totalScore - battle.roc.totalScore}p!`;
+    leaderTag.textContent = `🐹 Aura leder +${cur.aura.score - cur.roc.score}p!`;
   } else {
     leaderTag.textContent = `🤝 Helt jämnt!`;
   }
-}
-
-function saveAndRenderLeaderboard(newEntry) {
-  let records = JSON.parse(localStorage.getItem('musjakten_leaderboard_v2') || '[]');
-  records.push(newEntry);
-  records.sort((a, b) => b.score - a.score);
-  records = records.slice(0, 6);
-  localStorage.setItem('musjakten_leaderboard_v2', JSON.stringify(records));
 
   const listEl = document.getElementById('leaderboardList');
   listEl.innerHTML = '';
 
-  records.forEach((rec, idx) => {
+  // Visa avslutade veckors vinnare överst
+  const pastKeys = Object.keys(allWeeks).filter(k => k !== currentWeekKey).sort().reverse().slice(0, 3);
+  pastKeys.forEach(k => {
+    const wk = allWeeks[k];
+    const winnerText = wk.roc.score > wk.aura.score
+      ? `🐭 Roc (${wk.roc.score}p vs ${wk.aura.score}p)`
+      : wk.aura.score > wk.roc.score
+        ? `🐹 Aura (${wk.aura.score}p vs ${wk.roc.score}p)`
+        : `🤝 Oavgjort (${wk.roc.score}p)`;
     const row = document.createElement('div');
-    const isCurrent = rec.id === newEntry.id;
-    row.className = 'lb-row' + (isCurrent ? ' current-run' : '');
-    const medal = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `${idx + 1}.`));
+    row.className = 'lb-row';
+    row.style.borderLeft = "3px solid #38bdf8";
+    row.innerHTML = `<div>🏅 <b>${wk.label}:</b> ${winnerText}</div><div style="color:#38bdf8; font-size:11px;">Vinnare</div>`;
+    listEl.appendChild(row);
+  });
+
+  // Visa senaste omgångarna
+  recentRuns.slice(0, 5).forEach(rec => {
+    const row = document.createElement('div');
+    row.className = 'lb-row' + (rec.id === currentRunId ? ' current-run' : '');
     row.innerHTML = `
-      <div>
-        <span>${medal} ${rec.mouse} <b>${rec.name}</b></span>
-        <span style="color:#94a3b8; font-size:11px; margin-left:4px;">(${rec.date})</span>
-      </div>
+      <div>${rec.mouse} <b>${rec.name}</b> <span style="color:#94a3b8; font-size:11px;">(${rec.date})</span></div>
       <div style="font-weight:800; color:var(--accent);">${rec.score} p</div>
     `;
     listEl.appendChild(row);
   });
 }
-
-document.getElementById('clearRecordsBtn').addEventListener('click', () => {
-  if (confirm("Vill du nollställa topplistan och den sammanlagda tävlingen mellan Roc och Aura?")) {
-    localStorage.removeItem('musjakten_leaderboard_v2');
-    localStorage.removeItem('musjakten_battle_v1');
-    document.getElementById('leaderboardList').innerHTML = '<div style="font-size:12px; color:#64748b;">Nollställt!</div>';
-    document.getElementById('rocStatsText').innerHTML = 'Totalt: <b>0 p</b><br>Rätt svar: <b>0 st</b><br>Fokus & Reflex: <b>0%</b>';
-    document.getElementById('auraStatsText').innerHTML = 'Totalt: <b>0 p</b><br>Rätt svar: <b>0 st</b><br>Fokus & Reflex: <b>0%</b>';
-    document.getElementById('battleLeaderTag').textContent = '🤝 Helt jämnt!';
-  }
-});
 
 function finishGame(emoji, title, reason) {
   gameState = 'GAMEOVER';
@@ -1701,18 +1773,7 @@ function finishGame(emoji, title, reason) {
   clearAllHoles();
 
   const pInfo = getPlayerInfo();
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' });
   const focusIdx = computeFocusIndex(miceCaught, miceSpawned, cheesesCorrect, cheesesWrong, emptyMisses, catsHit);
-
-  const entry = {
-    id: Date.now(),
-    name: pInfo.name,
-    mouse: pInfo.emoji,
-    grade: pInfo.grade,
-    score: currentScore,
-    date: dateStr
-  };
 
   document.getElementById('gameOverEmoji').textContent = emoji;
   document.getElementById('gameOverTitle').textContent = title;
@@ -1727,9 +1788,8 @@ function finishGame(emoji, title, reason) {
   document.getElementById('statCats').textContent = `${catsHit} st`;
   document.getElementById('statMisses').textContent = `${emptyMisses} st`;
 
-  updateAndRenderBattle(pInfo.id, currentScore, cheesesCorrect, focusIdx);
-  saveAndRenderLeaderboard(entry);
   document.getElementById('gameOverScreen').classList.remove('hidden');
+  syncWeeklyBattle(pInfo.id, currentScore, cheesesCorrect, focusIdx);
 }
 </script>
 </body>
