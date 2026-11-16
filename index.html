@@ -9,7 +9,6 @@
   <link id="appleTouchIcon" rel="apple-touch-icon" href="" />
   <link id="faviconIcon" rel="icon" href="" />
   <title>Frågost</title>
-  <!-- PDF.js för att läsa PDF-filer direkt i webbläsaren på iPhone/Mac -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     if (window.pdfjsLib) {
@@ -69,16 +68,16 @@
       display: flex;
       flex-direction: column;
       padding-top: calc(env(safe-area-inset-top, 10px) + 76px);
-      padding-bottom: calc(env(safe-area-inset-bottom, 10px) + 10px);
-      padding-left: 12px;
-      padding-right: 12px;
+      padding-bottom: calc(env(safe-area-inset-bottom, 10px) + 12px);
+      padding-left: 14px;
+      padding-right: 14px;
     }
 
     #hud {
       position: fixed;
       top: env(safe-area-inset-top, 8px);
-      left: 12px;
-      right: 12px;
+      left: 14px;
+      right: 14px;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -96,7 +95,7 @@
       background: rgba(30, 41, 59, 0.94);
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 12px;
-      padding: 6px 11px;
+      padding: 6px 12px;
       font-weight: 800;
       font-size: 15px;
       display: flex;
@@ -111,7 +110,7 @@
       border: 1px solid rgba(255,255,255,0.18);
       color: white;
       border-radius: 12px;
-      padding: 6px 10px;
+      padding: 6px 11px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
@@ -139,6 +138,7 @@
       transition: width 0.2s linear;
     }
 
+    /* Griglia dinamica (iPhone 3x4, iPad Pro 4x5 o 6x4 con caselle più piccole) */
     #grid {
       flex: 1;
       display: grid;
@@ -151,7 +151,7 @@
 
     .hole {
       background: radial-gradient(circle at center, #1e293b 0%, #0b1120 100%);
-      border-radius: 22px;
+      border-radius: 20px;
       border: 2px solid rgba(255,255,255,0.06);
       display: flex;
       flex-direction: column;
@@ -176,7 +176,7 @@
     }
 
     .entity {
-      font-size: clamp(54px, 14vw, 76px);
+      font-size: clamp(46px, 12vw, 72px);
       line-height: 1;
       transform: scale(0);
       transition: transform 0.13s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -184,10 +184,40 @@
       filter: drop-shadow(0 6px 10px rgba(0,0,0,0.5));
     }
 
+    /* Ottimizzazione caselle e icone per iPad / schermi grandi */
+    @media (min-width: 740px) {
+      #arena {
+        padding-top: calc(env(safe-area-inset-top, 12px) + 84px);
+        padding-bottom: 18px;
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+      #hud {
+        left: 22px;
+        right: 22px;
+      }
+      #grid {
+        gap: 12px;
+      }
+      .hole {
+        border-radius: 18px;
+      }
+      .entity {
+        font-size: clamp(42px, 5.2vw, 60px);
+      }
+      .entity.cheese-big {
+        font-size: clamp(50px, 6.2vw, 70px);
+      }
+      .card {
+        max-width: 560px;
+        padding: 24px;
+      }
+    }
+
     .entity.visible { transform: scale(1); }
 
     .entity.cheese-big {
-      font-size: clamp(66px, 17vw, 88px);
+      font-size: clamp(58px, 15vw, 84px);
       filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.85));
     }
 
@@ -197,10 +227,10 @@
 
     .entity-tag {
       position: absolute;
-      bottom: 8px;
-      font-size: 11px;
+      bottom: 6px;
+      font-size: 10.5px;
       font-weight: 800;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 999px;
       background: rgba(15, 23, 42, 0.88);
       pointer-events: none;
@@ -209,7 +239,7 @@
     .float-text {
       position: absolute;
       font-weight: 900;
-      font-size: 18px;
+      font-size: 17px;
       pointer-events: none;
       animation: floatUp 0.65s ease-out forwards;
       z-index: 12;
@@ -721,7 +751,7 @@
       </div>
 
       <div class="home-footer-bar">
-        <span class="version-label">Version 3</span>
+        <span class="version-label">Version 4</span>
         <button id="openSettingsBtn" class="bottom-gear-btn" title="Inställningar">⚙️</button>
       </div>
     </div>
@@ -752,7 +782,6 @@
         <button class="btn" data-subject="pdf" id="pdfSubjectBtn">📄 PDF-ämne</button>
       </div>
 
-      <!-- Dold filväljare + tydlig knapp för att ladda upp PDF -->
       <input type="file" id="pdfFileInput" accept="application/pdf,.pdf" class="hidden" />
       <button class="btn btn-pdf-upload" id="uploadPdfBtn">📄 Ladda upp PDF (t.ex. Wikipedia-sida)</button>
       <div id="pdfStatusText" style="font-size:12px; color:var(--info); margin-bottom:8px; display:none; font-weight:700;"></div>
@@ -782,13 +811,13 @@
   <!-- Settings Modal (Firebase Synk) -->
   <div id="settingsModal" class="overlay hidden">
     <div class="card" style="text-align:left;">
-      <h2 style="margin:0 0 8px 0; color:var(--accent); font-size:20px;">⚙️ Molnsynk mellan iPhones</h2>
+      <h2 style="margin:0 0 8px 0; color:var(--accent); font-size:20px;">⚙️ Molnsynk mellan enheter</h2>
 
       <div style="margin-bottom:10px; padding:10px; background:#0f172a; border-radius:12px; border:1px solid #334155;">
         <label style="font-size:12px; font-weight:800; color:#4ade80;">Firebase Realtime Database URL:</label>
         <input type="url" id="firebaseUrlInput" placeholder="https://ditt-projekt.europe-west1.firebasedatabase.app" />
         <p style="font-size:11px; color:#94a3b8; margin:5px 0 0 0;">
-          Synkar både <b>Veckans Pott</b> och dina <b>uppladdade PDF-frågor</b> automatiskt mellan Roc och Auras telefoner.
+          Synkar både <b>Veckans Pott</b> och dina <b>uppladdade PDF-frågor</b> automatiskt mellan iPad och iPhone.
         </p>
       </div>
 
@@ -983,26 +1012,63 @@ class SoundFX {
 const sfx = new SoundFX();
 
 /* ==========================================================================
-   3. SPELVARIABLER & URL-SANERING
+   3. DYNAMISK RUTNÄTSBYGGARE (IPHONE 3x4 vs IPAD PRO 12.9" 4x5 / 6x4)
    ========================================================================== */
 const TOTAL_GAME_SECONDS = 300;
-const GRID_SIZE = 12;
 const gridEl = document.getElementById('grid');
-const holes = [];
+let holes = [];
+let isTabletLayout = false;
 
-for (let i = 0; i < GRID_SIZE; i++) {
-  const hole = document.createElement('div');
-  hole.className = 'hole';
-  const entity = document.createElement('div');
-  entity.className = 'entity';
-  const tag = document.createElement('div');
-  tag.className = 'entity-tag hidden';
-  hole.appendChild(entity);
-  hole.appendChild(tag);
-  gridEl.appendChild(hole);
-  holes.push({ el: hole, entityEl: entity, tagEl: tag, type: null, timer: null });
-  hole.addEventListener('pointerdown', (e) => { e.preventDefault(); handleHoleTap(i); });
+function getOptimalGridDimensions() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  // iPad Pro / stora skärmar: fler och mindre caselle
+  if (Math.max(w, h) >= 900 && Math.min(w, h) >= 650) {
+    return w > h
+      ? { cols: 6, rows: 4, isTablet: true }  // 24 caselle i liggande läge på iPad Pro
+      : { cols: 4, rows: 5, isTablet: true }; // 20 caselle i stående läge på iPad Pro
+  }
+  return { cols: 3, rows: 4, isTablet: false }; // 12 caselle på iPhone
 }
+
+function buildResponsiveGrid() {
+  const dims = getOptimalGridDimensions();
+  const totalCount = dims.cols * dims.rows;
+  isTabletLayout = dims.isTablet;
+
+  gridEl.style.gridTemplateColumns = `repeat(${dims.cols}, 1fr)`;
+  gridEl.style.gridTemplateRows = `repeat(${dims.rows}, 1fr)`;
+
+  if (holes.length === totalCount) return;
+
+  holes.forEach(h => clearTimeout(h.timer));
+  gridEl.innerHTML = '';
+  holes = [];
+
+  for (let i = 0; i < totalCount; i++) {
+    const hole = document.createElement('div');
+    hole.className = 'hole';
+    const entity = document.createElement('div');
+    entity.className = 'entity';
+    const tag = document.createElement('div');
+    tag.className = 'entity-tag hidden';
+    hole.appendChild(entity);
+    hole.appendChild(tag);
+    gridEl.appendChild(hole);
+    holes.push({ el: hole, entityEl: entity, tagEl: tag, type: null, timer: null });
+    hole.addEventListener('pointerdown', (e) => { e.preventDefault(); handleHoleTap(i); });
+  }
+}
+
+buildResponsiveGrid();
+window.addEventListener('resize', () => {
+  if (gameState !== 'PLAYING') buildResponsiveGrid();
+  else {
+    const dims = getOptimalGridDimensions();
+    gridEl.style.gridTemplateColumns = `repeat(${dims.cols}, 1fr)`;
+    gridEl.style.gridTemplateRows = `repeat(${dims.rows}, 1fr)`;
+  }
+});
 
 function normalizeFirebaseUrl(raw) {
   if (!raw) return '';
@@ -1091,10 +1157,9 @@ function updatePdfSubjectButton() {
 updatePdfSubjectButton();
 
 /* ==========================================================================
-   4. PDF-LÄSARE & AUTOMATISK FRÅGEGENERATOR (100% LOKALT + WIKIPEDIA-STÖD)
+   4. PDF-LÄSARE & AUTOMATISK FRÅGEGENERATOR
    ========================================================================== */
 function generateQuestionsFromExtractedText(rawText, topicTitle) {
-  // Rensa Wikipedia-referenser [1], [redigera], extra mellanslag och sidfötter
   const cleanedText = rawText
     .replace(/\[\d+\]/g, '')
     .replace(/\[redigera[^\]]*\]/gi, '')
@@ -1102,7 +1167,6 @@ function generateQuestionsFromExtractedText(rawText, topicTitle) {
     .replace(/\s+/g, ' ')
     .trim();
 
-  // Dela upp i meningsfulla meningar (45 till 175 tecken)
   const rawSentences = cleanedText.split(/(?<=[.!?])\s+/);
   const sentences = rawSentences
     .map(s => s.trim())
@@ -1112,7 +1176,6 @@ function generateQuestionsFromExtractedText(rawText, topicTitle) {
     throw new Error("PDF-filen innehöll för lite läsbar text. Prova en annan PDF.");
   }
 
-  // Samla nyckelord (substantiv/egenamn/årtal) från hela texten att använda som distraktorer
   const stopWords = new Set([
     "och","att","det","som","för","med","till","den","har","inte","var","om","men","ett","eller",
     "från","kan","vid","under","efter","också","blev","man","när","ut","över","inom","mellan",
@@ -1130,7 +1193,6 @@ function generateQuestionsFromExtractedText(rawText, topicTitle) {
     const words = s.replace(/[.,!?;:()"«»]/g, '').split(/\s+/);
     words.forEach((w, idx) => {
       if (w.length >= 5 && !stopWords.has(w.toLowerCase()) && !/^\d+$/.test(w)) {
-        // Prioritera ord med stor bokstav inne i meningen (namn, platser, begrepp) eller långa ord
         if (idx > 0 && /^[A-ZÅÄÖ]/.test(w)) {
           if (!allKeywords.includes(w)) allKeywords.push(w);
         } else if (w.length >= 7) {
@@ -1143,21 +1205,17 @@ function generateQuestionsFromExtractedText(rawText, topicTitle) {
 
   const generated = [];
   const usedSentences = new Set();
-
-  // Blanda meningarna så frågorna kommer från hela dokumentet
   const shuffledSentences = shuffleArray([...sentences]);
 
   for (const s of shuffledSentences) {
     if (generated.length >= 34) break;
     if (usedSentences.has(s)) continue;
 
-    // Typ 1: Årtalsfråga om meningen innehåller ett årtal (1000–2026)
     const yearMatch = s.match(/\b(1\d{3}|20\d{2})\b/);
     if (yearMatch) {
       const correctYear = yearMatch[1];
       const questionStem = s.replace(correctYear, "____");
       const distractors = [];
-      // Hämta andra årtal från texten eller skapa rimliga närliggande årtal
       years.filter(y => y !== correctYear).forEach(y => {
         if (distractors.length < 3) distractors.push(y);
       });
@@ -1182,7 +1240,6 @@ function generateQuestionsFromExtractedText(rawText, topicTitle) {
       }
     }
 
-    // Typ 2: Begrepps- och faktafråga (lucktest på det viktigaste nyckelordet i meningen)
     const words = s.split(/\s+/);
     let bestTarget = null;
     let bestIndex = -1;
@@ -1190,7 +1247,6 @@ function generateQuestionsFromExtractedText(rawText, topicTitle) {
     for (let i = 1; i < words.length; i++) {
       const cleanW = words[i].replace(/[.,!?;:()"«»]/g, '');
       if (cleanW.length >= 5 && !stopWords.has(cleanW.toLowerCase()) && !/^\d+$/.test(cleanW)) {
-        // Egennamn/begrepp med stor bokstav är bäst
         if (/^[A-ZÅÄÖ]/.test(cleanW)) {
           bestTarget = cleanW;
           bestIndex = i;
@@ -1255,7 +1311,7 @@ document.getElementById('pdfFileInput').addEventListener('change', async (e) => 
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     let fullText = "";
-    const maxPages = Math.min(pdf.numPages, 15); // Läs upp till 15 sidor
+    const maxPages = Math.min(pdf.numPages, 15);
 
     for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
       const page = await pdf.getPage(pageNum);
@@ -1273,14 +1329,12 @@ document.getElementById('pdfFileInput').addEventListener('change', async (e) => 
     localStorage.setItem('fragost_pdf_q', JSON.stringify(pdfQuestions));
     localStorage.setItem('fragost_pdf_topic', pdfTopicName);
 
-    // Markera PDF-ämnet som valt direkt
     document.querySelectorAll('#subjectGrid .btn').forEach(b => b.classList.remove('selected'));
     document.getElementById('pdfSubjectBtn').classList.add('selected');
     selectedSubject = 'pdf';
 
     updatePdfSubjectButton();
 
-    // Synka även PDF-frågorna till Firebase så den andra iPhonen får dem automatiskt!
     if (firebaseDbUrl) {
       fetch(`${firebaseDbUrl}/fragost_pdf.json`, {
         method: "PUT",
@@ -1356,7 +1410,6 @@ async function refreshHomeDashboard() {
           homeSyncLabel.style.color = "#ef4444";
         }
 
-        // Hämta även eventuellt delat PDF-ämne från molnet
         const pdfRes = await fetch(`${firebaseDbUrl}/fragost_pdf.json`, { cache: "no-store" });
         if (pdfRes.ok) {
           const cloudPdf = await pdfRes.json();
@@ -1526,7 +1579,7 @@ document.getElementById('testConnectionsBtn').addEventListener('click', async ()
       body: JSON.stringify({ ok: true, ts: Date.now() })
     });
     if (res.ok) {
-      diagBox.innerHTML = '✅ Firebase Moln OK (Läs & skriv fungerar mellan telefonerna!)';
+      diagBox.innerHTML = '✅ Firebase Moln OK (Läs & skriv fungerar mellan iPad och iPhone!)';
     } else if (res.status === 401 || res.status === 403) {
       diagBox.innerHTML = '❌ Firebase låst (401/403): Ändra Regole till ".read": true, ".write": true och tryck Pubblica.';
     } else {
@@ -1538,7 +1591,7 @@ document.getElementById('testConnectionsBtn').addEventListener('click', async ()
 });
 
 /* ==========================================================================
-   7. SPELKONTROLLER & KORTLEKSHANTERING (MED ANTI-UPPREPNING)
+   7. SPELKONTROLLER & KORTLEKSHANTERING
    ========================================================================== */
 document.querySelectorAll('#subjectGrid .btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1595,7 +1648,6 @@ function buildQuestionDecks() {
   if (selectedSubject === 'pdf') {
     pool = [...pdfQuestions];
   } else if (selectedSubject === 'blandat') {
-    // I Blandat ingår både skolämnena och eventuella uppladdade PDF-frågor!
     pool = [...baseBank, ...pdfQuestions];
   } else {
     pool = baseBank.filter(q => q.subject === selectedSubject);
@@ -1648,6 +1700,7 @@ function clearAllHoles() {
 }
 
 function startGame() {
+  buildResponsiveGrid();
   clearTimeout(spawnTimeout);
   clearInterval(quizInterval);
   clearAllHoles();
@@ -1699,14 +1752,16 @@ function gameLoop(now) {
 
 function scheduleNextSpawn(customDelay = null) {
   if (gameState !== 'PLAYING') return;
+  // Anpassa tempo efter antal rutor (iPad har 20-24 rutor, iPhone har 12)
+  const speedFactor = isTabletLayout ? 0.72 : 1.0;
   let delay;
   if (customDelay !== null) {
     delay = customDelay;
   } else {
     const paceRoll = Math.random();
-    if (paceRoll < 0.20) delay = 1400 + Math.random() * 1000;
-    else if (paceRoll < 0.55) delay = 280 + Math.random() * 350;
-    else delay = 550 + Math.random() * 650;
+    if (paceRoll < 0.20) delay = (1350 + Math.random() * 900) * speedFactor;
+    else if (paceRoll < 0.55) delay = (260 + Math.random() * 340) * speedFactor;
+    else delay = (520 + Math.random() * 620) * speedFactor;
   }
 
   spawnTimeout = setTimeout(() => {
@@ -1722,23 +1777,30 @@ function spawnEntities() {
 
   const idx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
   const roll = Math.random();
-  const baseDur = selectedGrade === '3' ? 980 : 760;
+  const baseDur = (selectedGrade === '3' ? 980 : 760) + (isTabletLayout ? 140 : 0);
 
   if (roll < 0.02) {
-    showEntity(idx, 'skull', 1100 + Math.random() * 400);
+    showEntity(idx, 'skull', 1150 + Math.random() * 400);
   } else if (roll < 0.50) {
     miceSpawned++;
     showEntity(idx, 'mouse', baseDur + Math.random() * 500);
+    // På iPad dyker ibland en extra mus upp samtidigt i en annan ruta
+    if (isTabletLayout && emptyIndices.length > 4 && Math.random() < 0.45) {
+      const other = emptyIndices.filter(i => i !== idx);
+      const idx2 = other[Math.floor(Math.random() * other.length)];
+      miceSpawned++;
+      showEntity(idx2, 'mouse', baseDur + 100 + Math.random() * 500);
+    }
   } else if (roll < 0.76) {
     showEntity(idx, 'cat', baseDur + 100 + Math.random() * 550);
   } else {
     const isHard = Math.random() > 0.5;
-    showEntity(idx, isHard ? 'cheese_hard' : 'cheese_easy', 1450 + Math.random() * 500);
+    showEntity(idx, isHard ? 'cheese_hard' : 'cheese_easy', 1500 + Math.random() * 500);
 
-    if (emptyIndices.length > 2 && Math.random() < 0.45) {
+    if (emptyIndices.length > 2 && Math.random() < (isTabletLayout ? 0.65 : 0.45)) {
       const otherEmpty = emptyIndices.filter(i => i !== idx);
       const idx2 = otherEmpty[Math.floor(Math.random() * otherEmpty.length)];
-      showEntity(idx2, isHard ? 'cheese_easy' : 'cheese_hard', 1450 + Math.random() * 500);
+      showEntity(idx2, isHard ? 'cheese_easy' : 'cheese_hard', 1500 + Math.random() * 500);
     }
   }
 }
